@@ -222,3 +222,17 @@ and hit it with a matching sound effect.
 - Source: beats Bjorn puts in a Drive folder "BEATS (FOR CLAUDE)". For TikTok/IG, adding a
   trending sound in the app at low volume at upload also helps reach. A baked-in bed stays
   for YouTube Shorts.
+
+## Background music — VIRAL ONLY (Bjorn, v0.4)
+- **Only use viral, commonly used shorts sounds.** No new/unknown tracks — familiar sounds
+  keep retention because viewers instantly recognize the vibe.
+- **The music must match the scene.** If no viral track fits, use no music rather than the wrong one.
+- Library: `shorts/beds_manifest.tsv` (Sneaky Snitch, Fluffing a Duck, Investigations,
+  SpongeBob investigation, Pink Panther, Mission Impossible flute, Jeopardy thinking, elevator,
+  Curb Your Enthusiasm outro, sad violin, Chopin Nocturne for flex, Oh No No No...) and
+  `shorts/beats_manifest.tsv` (Brazilian phonk / montagem for hype).
+- Vibe reference: CapCut Commercial library picks Bjorn screenshotted (Laugh Meme So Laugh,
+  Laughter in the Investigated, Sneaky Comedy, Comedy Scenes, Quirky Comedy, Plot humor sneaky,
+  FICO PRESO Ultra Slowed, Aggressive Game Surge, Trap Epic, Ho no no no) → comedic/sneaky/
+  investigation beds for funny clips, slowed phonk/trap for hype.
+- Bjorn will send more track names later; add them here.
