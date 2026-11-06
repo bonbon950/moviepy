@@ -32,15 +32,28 @@ plan = {
     "source": f"{V}/nail_src.mp4", "keep": keep, "layout": "sandwich", "fonts_dir": f"{S}/fonts",
     "header": {"lines": ["A POWER RANGER", "BROKE KAI'S NAIL \U0001F62D"], "color": "#FF2E88"},
     "words": caps,
+    # Positions: video band is y 656-1264 (eye level ~780-1000); empty bottom band zone ~y 1350-1560.
     "tags": [
-        {"t": 2.0, "e": 2.9, "text": "*MOMENTS EARLIER*"},
-        {"t": 3.0, "e": 4.5, "text": "*EVERYONE LAUGHS*", "box": "#8B0000"},
-        {"t": 5.9, "e": 6.6, "text": "*NAIL BREAKS*", "box": "#8B0000"},
-        {"t": 12.4, "e": 13.0, "text": "*KAI SCREAMS*"},
-        {"t": 12.9, "e": 13.9, "text": "*EVERYONE LAUGHS*", "box": "#8B0000"},
-        {"t": 13.9, "e": 15.4, "text": "*SEARCHING FOR HIS NAIL*"},
-        {"t": 21.9, "e": 22.4, "text": "*NO SORRY*"},
-        {"t": 24.3, "e": 25.2, "text": "*THEY LAUGH*", "box": "#8B0000"},
+        {"t": 2.0, "e": 2.9, "text": "*MOMENTS EARLIER*", "x": 540, "y": 770, "size": 96},
+        {"t": 3.0, "e": 4.5, "text": "*EVERYONE LAUGHS*", "box": "#8B0000", "x": 540, "y": 1440, "size": 118, "rot": -4},
+        {"t": 5.9, "e": 6.7, "text": "*NAIL BREAKS*", "box": "#8B0000", "x": 380, "y": 900, "size": 132, "rot": 5},
+        {"t": 12.4, "e": 13.0, "text": "*KAI SCREAMS*", "x": 700, "y": 820, "size": 128, "rot": -6},
+        {"t": 12.9, "e": 13.9, "text": "*EVERYONE LAUGHS*", "box": "#8B0000", "x": 540, "y": 1450, "size": 112, "rot": 3},
+        {"t": 13.3, "e": 14.5, "text": "*SEARCHING FOR HIS NAIL*", "x": 540, "y": 960, "size": 92, "rot": 2},
+        {"t": 21.9, "e": 22.4, "text": "*NO SORRY*", "x": 760, "y": 860, "size": 142, "rot": -7},
+        {"t": 24.3, "e": 25.2, "text": "*THEY LAUGH*", "box": "#8B0000", "x": 540, "y": 1440, "size": 116, "rot": 4},
+    ],
+    # glossy 3D emoji, picked per scene (not on every beat)
+    "stickers": [
+        {"t": 0.9, "e": 2.0, "emoji": "\U0001F62D\U0001F62D", "x": 540, "y": 1450, "size": 190},   # Kai screaming over the nail
+        {"t": 3.0, "e": 4.5, "emoji": "\U0001F602\U0001F602", "x": 860, "y": 770, "size": 135},   # laughing at the Ranger
+        {"t": 6.7, "e": 8.4, "emoji": "\U0001F485\U0001F494", "x": 540, "y": 1460, "size": 185},   # nail polish + broken heart
+        {"t": 13.3, "e": 14.5, "emoji": "\U0001F440", "x": 190, "y": 790, "size": 150},             # searching the floor
+        {"t": 17.8, "e": 19.3, "emoji": "\U0001F92C", "x": 540, "y": 1450, "size": 200},            # "MY F*CKING NAIL!"
+        {"t": 30.0, "e": 33.2, "emoji": "\U0001FAE1", "x": 540, "y": 1450, "size": 180},            # "that's just life"
+        {"t": 38.3, "e": 40.6, "emoji": "\U0001F4AF", "x": 540, "y": 1450, "size": 200},  # words of wisdom
+        {"t": 45.0, "e": 46.5, "emoji": "\U0001F480\U0001F480\U0001F480", "x": 540, "y": 1450, "size": 170},  # "you like my CONTACTS?"
+        {"t": 46.5, "e": 48.6, "emoji": "\U0001F62D\U0001F62D", "x": 540, "y": 1450, "size": 190},  # "the rest is wack"
     ],
     "zooms": [
         {"t": 0.0, "e": 0.55, "type": "punch", "amt": 1.25},
@@ -68,7 +81,7 @@ plan = {
         {"t": 6.0, "file": f"{SFX}/bass_drop.mp3", "gain_db": -6, "dur": 1.5},
         {"t": 12.2, "file": f"{SFX}/vine_boom.mp3", "gain_db": -6},         # "...as f*ck"
         {"t": 12.9, "file": f"{SFX}/sitcom_laugh.mp3", "gain_db": -12, "dur": 1.1},
-        {"t": 13.9, "file": f"{SFX}/suspense.mp3", "gain_db": -9, "dur": 1.5},  # searching the floor
+        {"t": 13.3, "file": f"{SFX}/suspense.mp3", "gain_db": -9, "dur": 1.3},  # searching the floor
         {"t": 17.8, "file": f"{SFX}/bass_boom.mp3", "gain_db": -4},         # "MY F*CKING NAIL!"
         {"t": 21.9, "file": f"{SFX}/bruh.mp3", "gain_db": -4},              # no apology
         {"t": 24.3, "file": f"{SFX}/sitcom_laugh.mp3", "gain_db": -13, "dur": 1.0},

@@ -62,7 +62,8 @@ def build_ass(p, dur, path, cap_y, head_y):
         # slam in: scale from 160% -> 92% -> 100% over 300 ms, stays the whole video
         anim = "{\\fscx160\\fscy160\\t(0,140,\\fscx92\\fscy92)\\t(140,300,\\fscx100\\fscy100)}"
         lines.append(f"Dialogue: 5,{ts(0)},{ts(dur)},Header,,0,0,0,,{{\\pos({W//2},{head_y})}}{anim}{txt}")
-    tag_spans = [(g["t"], g["e"]) for g in p.get("tags", [])]
+    tag_spans = [(g["t"], g["e"]) for g in p.get("tags", [])
+                 if abs(g.get("y", cap_y) - cap_y) < 160]
     for wd in p.get("words", []):
         if any(a <= wd["t"] < b for a, b in tag_spans):
             continue  # tag replaces the caption while it's on screen
@@ -73,9 +74,15 @@ def build_ass(p, dur, path, cap_y, head_y):
     for g in p.get("tags", []):
         style = "TagBox" if g.get("box") else "Tag"
         extra = f"\\3c{ass_color(g['box'])}\\4c{ass_color(g['box'])}" if g.get("box") else ""
-        pop = "{\\fscx50\\fscy50\\t(0,90,\\fscx112\\fscy112)\\t(90,170,\\fscx100\\fscy100)}"
+        x, y = g.get("x", W // 2), g.get("y", cap_y)
+        fs = f"\\fs{g['size']}" if g.get("size") else ""
+        rot = f"\\frz{g['rot']}" if g.get("rot") else ""
+        # pop with overshoot, then a slow 'breathing' grow so it never sits dead still
+        dur_ms = int((g["e"] - g["t"]) * 1000)
+        pop = ("{\\fscx40\\fscy40\\t(0,90,\\fscx125\\fscy125)\\t(90,180,\\fscx100\\fscy100)"
+               f"\\t(180,{max(200, dur_ms)},\\fscx108\\fscy108)}}")
         lines.append(f"Dialogue: 4,{ts(g['t'])},{ts(g['e'])},{style},,0,0,0,,"
-                     f"{{\\pos({W//2},{cap_y}){extra}}}{pop}{g['text'].upper()}")
+                     f"{{\\pos({x},{y}){fs}{rot}{extra}}}{pop}{g['text'].upper()}")
     open(path, "w").write("\n".join(lines) + "\n")
 
 
@@ -128,6 +135,31 @@ def render_header_png(hd, fonts_dir, path, max_w=W - 80):
                 x += int(size * 1.05)
     if img.width > max_w:
         img = img.resize((max_w, int(img.height * max_w / img.width)), Image.LANCZOS)
+    img.save(path)
+    return img.size
+
+
+def render_sticker_png(text, path, size=170):
+    """Row of glossy 3D emoji (each slightly tilted) as one transparent PNG."""
+    from PIL import Image
+    import random
+    cps = [f"{ord(c):x}" for c in text if ord(c) > 0x2000 and ord(c) not in (0xFE0F, 0x200D)]
+    rnd = random.Random(text + str(size))
+    tiles = []
+    for cp in cps:
+        f = os.path.join(EMOJI_DIR, cp + ".png")
+        if not os.path.exists(f):
+            continue
+        em = Image.open(f).convert("RGBA").resize((size, size), Image.LANCZOS)
+        tiles.append(em.rotate(rnd.uniform(-14, 14), resample=Image.BICUBIC, expand=True))
+    if not tiles:
+        return None
+    gap = int(size * -0.12)
+    w = sum(t.width for t in tiles) + gap * (len(tiles) - 1)
+    h = max(t.height for t in tiles) + 20
+    img = Image.new("RGBA", (w, h), (0, 0, 0, 0)); x = 0
+    for t in tiles:
+        img.alpha_composite(t, (x, (h - t.height) // 2 + rnd.randint(-10, 10))); x += t.width + gap
     img.save(path)
     return img.size
 
@@ -203,6 +235,18 @@ def main(plan_path, out):
         v += (f"[pre];movie={hd['png']},loop=-1:1:0,setpts=N/{FPS}/TB,"
               f"scale=w='trunc(iw*({sc})/2)*2':h=-2:eval=frame[hdr];"
               f"[pre][hdr]overlay=x='(W-w)/2':y='{head_y}-h/2':eval=frame:shortest=1")
+    for k, st in enumerate(p.get("stickers", [])):
+        png = os.path.join(tmp, f"st{k}.png")
+        if not render_sticker_png(st["emoji"], png, st.get("size", 170)):
+            continue
+        t0, t1 = st["t"], st["e"]
+        # pop in (40% -> 120% -> 100%) then a gentle bob; only visible between t0 and t1
+        sc = (f"if(lt(t,{t0}),0.4,if(lt(t-{t0},0.1),0.4+0.8*(t-{t0})/0.1,if(lt(t-{t0},0.2),"
+              f"1.2-0.2*(t-{t0}-0.1)/0.1,1+0.04*sin(2*PI*(t-{t0})*1.6))))")
+        v += (f"[m{k}];movie={png},loop=-1:1:0,setpts=N/{FPS}/TB,"
+              f"scale=w='max(2,trunc(iw*({sc})/2)*2)':h='max(2,trunc(ih*({sc})/2)*2)':eval=frame[s{k}];"
+              f"[m{k}][s{k}]overlay=x='{st.get('x', W // 2)}-w/2':y='{st.get('y', 1450)}-h/2':eval=frame:"
+              f"enable='between(t,{t0},{t1})'")
     v += ",format=yuv420p[vout]"
 
     # 3) audio: original + SFX + music bed (ducked under voice) -> loudness normalize

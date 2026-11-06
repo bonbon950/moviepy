@@ -236,3 +236,27 @@ and hit it with a matching sound effect.
   FICO PRESO Ultra Slowed, Aggressive Game Surge, Trap Epic, Ho no no no) → comedic/sneaky/
   investigation beds for funny clips, slowed phonk/trap for hype.
 - Bjorn will send more track names later; add them here.
+
+## v0.5 — Bjorn's notes on test edit v1 ("NEED IMPROVEMENT (FOR CLAUDE)")
+
+### Action tags: move around, change size
+- **Never all in one spot.** Every tag gets its own position, chosen for the scene:
+  - **Eye level** inside the video band (y ≈ 780–1000 of 1920), left / center / right,
+    next to the person or action it describes.
+  - **Sometimes** in the empty bottom blur band (y ≈ 1350–1560, centered) — the area Bjorn
+    circled. Not every time; mix it up.
+- **Size varies** per tag (≈ 92–145 px): noticeably bigger on big moments, never covering the screen.
+- Slight tilt (±2–7°), pop-in with overshoot, then a slow "breathing" grow while on screen.
+- Captions keep running when a tag is placed away from the caption spot.
+
+### Emoji stickers
+- Add emoji on memorable moments (laughs, shock, cringe, roasts) — **sometimes**, not every beat.
+- **Always matched to the scene**, e.g. catching something weird → 💀💀💀, crying/loss → 😭😭,
+  laughing → 😂😂, rage → 🤬, searching → 👀, wisdom → 💯, nail/beauty → 💅💔.
+- Placement: usually the empty bottom band; sometimes a corner at eye level.
+- 1–3 emoji in a row, each slightly tilted, pop in, gentle bob.
+
+### Emoji quality
+- **High-res glossy 3D emoji** (Microsoft Fluent Emoji 3D, 256 px, MIT license) — the iPhone-style
+  look. Apple's own emoji artwork is Apple property and can't be bundled.
+  `python3 shorts/tools/fetch_emoji.py OUT_DIR` downloads the set (58 emoji).
