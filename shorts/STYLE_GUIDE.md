@@ -1,7 +1,7 @@
 # Bjorn's Shorts Rulebook
 
 The rulebook for every short I edit for Bjorn. **Every rule here comes from Bjorn's own instructions,**
-his 14 sample edits, his 3 reference videos, and his notes on the test edits. Version 1.0.
+his 14 sample edits, his 3 reference videos, and his notes on the test edits. Version 1.1.
 When a rule and a habit disagree, the rule wins. Tested on: *"A POWER RANGER BROKE KAI'S NAIL 😭"*.
 
 ---
@@ -19,6 +19,7 @@ Creators: **Kai Cenat, TJR, Duke Dennis, Rakai, Fanum** (and their crews).
 | Rule | Value |
 |---|---|
 | Format | **9:16, 1080×1920, 30 fps, always 1080p** |
+| Output per material | **6–8 SOLID videos every time** Bjorn sends a link or material |
 | Length | **40–50 seconds** |
 | Header | **Always** a header at the top, visible the whole video |
 | Captions | **Always moving** — never static |
@@ -28,6 +29,7 @@ Creators: **Kai Cenat, TJR, Duke Dennis, Rakai, Fanum** (and their crews).
 | Crop | **Minimal** — never crop so much it disturbs the viewer |
 | Twitch chat / overlays | **Keep visible** |
 | Export | ≥ 10 Mbps H.264, AAC 192k, loud and consistent (target −10 LUFS, −1 dBTP) |
+| Delivery | Upload every video to Bjorn's Google Drive folder **`OUTPUT (<date>)`** |
 
 **Never:** CapCut end card or watermark · garbled or wrong captions · uncensored curse words in
 captions · a header that lies about the clip · nonsense SFX that don't fit · new/unknown music ·
@@ -35,17 +37,27 @@ low-res or stretched emoji · dead air.
 
 ---
 
-## 2. Finding the clip
-1. Bjorn sends a **Twitch VOD/clip link** → I download it directly. (YouTube blocks cloud
-   downloads → for YouTube, Bjorn puts the video in Google Drive and sends the link.)
-2. Scan the whole stream's audio second by second: **laughter, screaming, crowd, loudness**.
-   Skip music-only stretches and the parts Twitch muted.
-3. Transcribe the stream and read the top spikes; look at the frames.
-4. Pick the moment with a **complete mini-story**: setup → chaos → payoff. Prefer moments
-   other clippers haven't already posted.
-5. Download only that moment in 1080p60.
+## 2. ⭐ Finding the clips (MOST IMPORTANT RULE)
+**Every link or material → 6–8 SOLID videos.** All of them must follow every rule in this book.
+Finding the right moments matters more than any effect.
 
----
+1. Bjorn sends a **Twitch VOD/clip link** → download directly. (YouTube blocks cloud downloads →
+   Bjorn puts YouTube videos in Google Drive and sends the link.)
+2. **Scan the whole stream**, second by second: laughter, screaming, crowd, loudness. Skip
+   music-only stretches and the parts Twitch muted.
+3. **Transcribe the whole stream** and read every top spike; look at the frames.
+4. A moment is **SOLID** only if it has:
+   - a **complete mini-story**: setup → chaos/reaction → payoff, understandable with no context;
+   - **real entertainment**: big laugh, roast, shock, prank, fail, argument, wholesome/hype peak;
+   - a **hook in the first 3 s** (a line or reaction strong enough for the cold open);
+   - enough material for **40–50 s** without filler;
+   - clean, usable audio (not muted by Twitch, not buried under music).
+5. Pick **6–8 different moments**: no overlapping footage, no repeating the same joke. Prefer
+   moments other clippers haven't already posted.
+6. Rank them by entertainment; edit all of them; run the checklist (section 11) on every one.
+7. **Never pad with weak clips.** If a stream truly has fewer than 6 solid moments, say so
+   clearly, tell Bjorn how many it has and why, and deliver only the solid ones.
+8. Download only the chosen moments in 1080p60.
 
 ## 3. Structure (40–50 s)
 - **Cold open (0–2 s):** start on the peak — the loudest/funniest line — then rewind with a
@@ -167,6 +179,18 @@ matching sound effect**.
 - [ ] Music: viral, quiet, matches each part; no dialogue buried
 - [ ] No CapCut watermark, no dead air
 - [ ] Review frames at every tag, sticker and hit before sending
+
+---
+
+## 12. Delivery
+- Create (or reuse) a Google Drive folder in Bjorn's account named **`OUTPUT (<date>)`**,
+  e.g. `OUTPUT (November 6, 2026)` — the date the videos are made. Same day → same folder.
+- Upload all 6–8 videos there. File names: `01_<SHORT_TITLE>.mp4`, `02_...` in ranking order.
+- Also send a short summary in chat: folder link, and for each video the header, VOD timestamp
+  and why the moment is strong.
+- Upload path: the Apps Script uploader Bjorn installs once (`tools/drive_uploader.gs`) +
+  `tools/upload_drive.py`. The Drive connector alone can create the folder but cannot upload files
+  this big.
 
 ---
 
