@@ -1,7 +1,7 @@
 # Bjorn's Shorts Style Guide
 
 Built from a scan of 14 of my own edits (Drive folder "MY STYLE (for claude)") plus my SFX pack.
-This file is the rulebook for every clip. Version 0.2 — Bjorn's decisions locked in (see "Editing decisions").
+This file is the rulebook for every clip. Version 0.3 — Bjorn's decisions + reference style (see bottom).
 
 ## Hard rules (never break)
 
@@ -141,3 +141,72 @@ This file is the rulebook for every clip. Version 0.2 — Bjorn's decisions lock
   - **Punch zoom (aggressive, ~115–125%, 2–4 frames)** on reactions, roasts, SFX hits.
   - **Slow push (gentle, 100→108% over 2–4 s)** on talking/explaining stretches.
 - Viewers should notice the movement, but it must never feel shaky or nauseating.
+
+---
+
+# v0.3 — Reference style ("IDEAL EDIT SHORTS (FOR CLAUDE)")
+
+Scanned 3 reference shorts frame-by-frame (2 fps), with audio tagging (AudioSet model),
+transcripts, cut detection and spectrograms, plus 2 screenshots Bjorn marked as important.
+**This is the edit style Bjorn wants.** Take the ideas, be different, keep the same vibe.
+
+## ⭐ RULE: Action tags + SFX (most important)
+Every time something happens that isn't speech, show it on screen as a tag between asterisks
+and hit it with a matching sound effect.
+
+- **Laughing is mandatory:** whenever someone laughs → `*KAI LAUGHS*` / `*FANUM LAUGHING*`
+  (name of the person when known) + a laugh-type SFX or bass hit. Detected automatically
+  with the audio tagger (Laughter / Giggle / Chuckle / Belly laugh / Snicker), checked by eye.
+- Other actions seen in the references: `*CALLS SPEED*`, `*RAT NOISES*`, `*CONFUSED*`,
+  `*AGENT COSTUME*`, `*HYPED*`, `*PIZZA IN THE OVEN*`, `*CORRECT*`, `*TELL TOTA*`, `*$300*`.
+- Look: **tall condensed bold font (Bebas Neue / Anton style), ALL CAPS, white with a thick
+  black outline**, centered, same spot as the captions (it replaces the caption while it's on).
+  Variant: white text on a **dark red box** (screenshot 2).
+- Duration: hold for the whole action (0.5–2 s), pop in with a slight scale bounce.
+- Pair with a visual: punch zoom and/or a quick color flash (pink/red on laughs, see below).
+
+## Captions (reference style)
+- **One word at a time**, centered on the subject's chest/face area, condensed bold font
+  (same family as the action tags), white with black outline.
+- **Color per speaker** — each person gets a caption color (white / lime-yellow / light blue /
+  yellow) so viewers know who is talking. Keep the same color for that person all video.
+- **Special-voice color:** a different color/box for phone voices, voicemail, chat TTS, etc.
+  (ref 1 used a purple box for the voicemail voice).
+- **Keyword color:** money and numbers in green (`$300`).
+- Censor curse words with an asterisk in the caption (`F*CKING`, `B*TCH`) — never uncensored.
+
+## Visual effects
+- **Fast cuts:** ref 2 cuts roughly every 0.5–1 s in hype parts; refs 1/3 every 1–3 s.
+  Remove every pause; jump cut between sentences.
+- **Punch zooms** on the face on reactions (ref 1 at 8 s, ref 3 at 14 s).
+- **Color flashes:** 2–4 frame color wash on hits — black & white flash (ref 2 at 3.5 s),
+  green flash (ref 2 at 21 s), pink/red flash on laughs (ref 3 at 12 s and 17.5 s).
+- **Motion-blur whip transitions** between shots (ref 2).
+- **Color grade:** punchy — extra saturation and contrast, slight glow (ref 2).
+- **Meme / B-roll cutaway:** a 1–2 s visual joke that matches what was said (ref 1: man pouring
+  money into the ocean with `*$300*` while he says "you wasted $300").
+- **Layout switches mid-clip:** full-screen face crop for reactions, blur sandwich for wide
+  shots (ref 1 switches to the wide shot for `*CALLS SPEED*`; ref 3 mixes both).
+- Stream timers and chat overlays stay visible.
+- End on a punch: echo effect on the last word (ref 3 "OWVEN?") or a final meme hit.
+
+## Sound design (measured)
+- Bass **booms / beat drops land on the punchlines**, exactly synced with flashes and tags
+  (ref 3: 12.3 s on *KAI LAUGHS*, 17.6 s on the red flash; ref 1: drop at 13.3 s after the
+  voicemail, boom at 23.2 s on "ARE YOU SERIOUS?!").
+- Meme sounds used: FAHHH-style scream on the cutaway (ref 1 16.5 s), siren (ref 2 2.5 s and
+  21.5 s), quack/silly end hit (ref 2 25.5 s), bell (ref 3 0 s), echo tail (ref 3 21.5 s).
+- ⚠️ **All 3 references have a background music bed under the whole clip** (detected in
+  almost every second). Bjorn's rule #7 is "original audio only" → **open question.**
+
+## Kept from Bjorn's rules even though the references don't do it
+- The references have **no header** — Bjorn's rule says always have one → keep the header.
+- The references are 22–28 s — Bjorn's target is 40–50 s → keep 40–50 s.
+- The references crop tight on faces — Bjorn said minimal crop → tight crop only for
+  reaction punch-ins, otherwise minimal.
+
+## SFX library
+- `shorts/sfx_manifest.tsv` lists 67 sounds by category with when to use each.
+  `python3 shorts/tools/fetch_sfx.py OUT_DIR` rebuilds the library from Myinstants in about a minute.
+- Plus Bjorn's own 12-sound pack (gunshot, NANI, bell, DING...).
+- `shorts/tools/tagaudio.py` finds laughs and other sound events in any clip.
