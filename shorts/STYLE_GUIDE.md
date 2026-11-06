@@ -13,7 +13,7 @@ This file is the rulebook for every clip. Version 0.3 — Bjorn's decisions + re
 | Captions | **Always animated** (word-by-word highlight / pop). Never static. |
 | SFX | Heavy — **especially the first 3–5 s** — and always matched to the scene |
 | Creators | Kai Cenat, TJR, Duke Dennis, Rakai, Fanum |
-| Audio | **Original audio + SFX only. No background music.** |
+| Audio | Original audio + SFX + **a quiet background beat** (decided v0.3) |
 | Export | H.264/HEVC ≥ 10 Mbps, loudness normalized (see Audio) |
 | Never | CapCut end card / watermark, unrelated emojis, garbled captions |
 
@@ -129,8 +129,8 @@ This file is the rulebook for every clip. Version 0.3 — Bjorn's decisions + re
 ### 6. Twitch chat / stream overlays
 - Keep them visible.
 
-### 7. Audio
-- Original audio only. No music beds.
+### 7. Audio (updated v0.3)
+- Original audio + SFX + a quiet background beat, like the references.
 
 ### 8. Reference
 - No "best performer" data available — the 14-video folder is the baseline.
@@ -197,7 +197,7 @@ and hit it with a matching sound effect.
 - Meme sounds used: FAHHH-style scream on the cutaway (ref 1 16.5 s), siren (ref 2 2.5 s and
   21.5 s), quack/silly end hit (ref 2 25.5 s), bell (ref 3 0 s), echo tail (ref 3 21.5 s).
 - ⚠️ **All 3 references have a background music bed under the whole clip** (detected in
-  almost every second). Bjorn's rule #7 is "original audio only" → **open question.**
+  almost every second). **Decided: use a music bed (option B).**
 
 ## Kept from Bjorn's rules even though the references don't do it
 - The references have **no header** — Bjorn's rule says always have one → keep the header.
@@ -210,3 +210,15 @@ and hit it with a matching sound effect.
   `python3 shorts/tools/fetch_sfx.py OUT_DIR` rebuilds the library from Myinstants in about a minute.
 - Plus Bjorn's own 12-sound pack (gunshot, NANI, bell, DING...).
 - `shorts/tools/tagaudio.py` finds laughs and other sound events in any clip.
+
+## Music bed (decided: option B)
+- A beat runs under the whole clip, **quiet**: about 18–22 dB below the dialogue, and it
+  automatically dips further while people talk, so speech is never buried.
+- Energy matches the clip: phonk / drill / trap for hype or chaos, a lighter beat for flex or
+  chill clips. The beat changes from clip to clip.
+- **Beat drop / bass hit on the punchline**, synced with the action tag + flash (the reference
+  trick). Before a big moment, the music can cut to silence for 0.3–0.5 s, then slam back in.
+- Music never covers a laugh, a key line, or an SFX hit.
+- Source: beats Bjorn puts in a Drive folder "BEATS (FOR CLAUDE)". For TikTok/IG, adding a
+  trending sound in the app at low volume at upload also helps reach. A baked-in bed stays
+  for YouTube Shorts.
