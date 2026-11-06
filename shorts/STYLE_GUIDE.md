@@ -184,7 +184,8 @@ matching sound effect**.
 
 ## 12. Delivery
 - Create (or reuse) a Google Drive folder in Bjorn's account named **`OUTPUT (<date>)`**,
-  e.g. `OUTPUT (November 6, 2026)` — the date the videos are made. Same day → same folder.
+  e.g. `OUTPUT (November 6, 2026)` — the date the videos are made, in **Philippine time (Asia/Manila)**.
+  Same day → same folder. Uploader verified working (68 MB clip in ~2.5 min).
 - Upload all 6–8 videos there. File names: `01_<SHORT_TITLE>.mp4`, `02_...` in ranking order.
 - Also send a short summary in chat: folder link, and for each video the header, VOD timestamp
   and why the moment is strong.
