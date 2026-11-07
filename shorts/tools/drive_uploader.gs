@@ -1,21 +1,39 @@
 /**
- * Bjorn's Shorts -> Google Drive helper (Google Apps Script web app). Version 2.
- *
- * Can ONLY: create/find folders named "OUTPUT (...)", list what is inside them, upload video files
- * into them, and restore (un-trash) files that belong to an OUTPUT folder.
- * It has NO delete/trash ability and cannot see or touch anything outside OUTPUT folders.
- *
- * Update an existing deployment (keeps the same URL):
- *   Paste this file over Code.gs -> Save -> Deploy -> Manage deployments -> pencil (Edit)
- *   -> Version: New version -> Deploy (re-authorize if asked).
+ * Bjorn's Shorts -> Google Drive helper. Version 3.
+ * Can ONLY:
+ *  - create/find "OUTPUT (...)" folders, list them, upload videos into them,
+ *    restore (un-trash) files that belong to an OUTPUT folder;
+ *  - read / add rows / update cells in the ONE spreadsheet named "POSTING PLAN".
+ * NO delete ability anywhere. Cannot touch any other file or folder.
  */
-
 var OUT = /^OUTPUT \(.+\)$/;
+var PLAN_NAME = 'POSTING PLAN';
 
 function isOutputFile(file) {
   var ps = file.getParents();
   while (ps.hasNext()) { if (OUT.test(ps.next().getName())) return true; }
   return false;
+}
+
+function planSheet(id) {
+  var f = DriveApp.getFileById(id);
+  if (f.getName() !== PLAN_NAME || f.getMimeType() !== MimeType.GOOGLE_SHEETS) throw 'not the POSTING PLAN sheet';
+  return SpreadsheetApp.openById(id).getSheets()[0];
+}
+
+function stylePlan(sh) {  // keep it clean & easy to read (safe to run any time)
+  var lastCol = 8, lastRow = Math.max(sh.getLastRow(), 1);
+  sh.setFrozenRows(1);
+  sh.getRange(1, 1, 1, lastCol).setFontWeight('bold').setBackground('#111111').setFontColor('#FFFFFF')
+    .setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sh.setRowHeight(1, 36);
+  var widths = [70, 90, 280, 380, 160, 190, 130, 210];
+  for (var c = 0; c < widths.length; c++) sh.setColumnWidth(c + 1, widths[c]);
+  if (lastRow > 1) {
+    sh.getRange(2, 1, lastRow - 1, lastCol).setWrap(true).setVerticalAlignment('middle');
+    sh.getRange(2, 1, lastRow - 1, 1).setFontWeight('bold').setHorizontalAlignment('center');
+    sh.getRange(2, 7, lastRow - 1, 1).setHorizontalAlignment('center').setFontWeight('bold');
+  }
 }
 
 function doPost(e) {
@@ -27,7 +45,7 @@ function doPost(e) {
       var f = it.hasNext() ? it.next() : DriveApp.createFolder(p.name);
       return out({id: f.getId(), url: f.getUrl()});
     }
-    if (p.action === 'list') {  // everything in one OUTPUT folder, including trashed items
+    if (p.action === 'list') {
       var folder = DriveApp.getFolderById(p.folderId);
       if (!OUT.test(folder.getName())) return out({error: 'not an OUTPUT folder'});
       var files = [], fi = folder.getFiles();
@@ -37,12 +55,36 @@ function doPost(e) {
       }
       return out({files: files});
     }
-    if (p.action === 'restore') {  // un-trash a file that lives in an OUTPUT folder
+    if (p.action === 'restore') {
       var file = DriveApp.getFileById(p.fileId);
       if (!isOutputFile(file)) return out({error: 'file is not in an OUTPUT folder'});
       if (!file.isTrashed()) return out({ok: true, note: 'already not in trash', name: file.getName()});
       file.setTrashed(false);
       return out({ok: true, name: file.getName()});
+    }
+    if (p.action === 'sheet_read') {
+      var sh = planSheet(p.sheetId);
+      return out({values: sh.getDataRange().getDisplayValues()});
+    }
+    if (p.action === 'sheet_set') {  // one cell: row, col (1-based)
+      var sh2 = planSheet(p.sheetId);
+      sh2.getRange(Number(p.row), Number(p.col)).setValue(p.value);
+      return out({ok: true});
+    }
+    if (p.action === 'sheet_append') {  // body = JSON array of rows (8 columns); inserted above "HOW TO USE:"
+      var sh3 = planSheet(p.sheetId);
+      var rows = JSON.parse(e.postData.contents);
+      var vals = sh3.getDataRange().getValues(), at = vals.length + 1;
+      for (var i = 0; i < vals.length; i++) { if (String(vals[i][0]).indexOf('HOW TO USE') === 0) { at = i; break; } }
+      // keep one blank spacer row before HOW TO USE
+      if (at <= vals.length) { sh3.insertRowsBefore(at, rows.length); } else { at = vals.length + 1; }
+      sh3.getRange(at, 1, rows.length, rows[0].length).setValues(rows);
+      stylePlan(sh3);
+      return out({ok: true, firstRow: at, count: rows.length});
+    }
+    if (p.action === 'sheet_style') {
+      stylePlan(planSheet(p.sheetId));
+      return out({ok: true});
     }
     if (p.action === 'start') {
       var folder2 = DriveApp.getFolderById(p.folderId);
