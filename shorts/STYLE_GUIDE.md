@@ -223,7 +223,7 @@ matching sound effect**.
   Visibility → Schedule at POST TIME 🇵🇭), then types SCHEDULED.
 - **ONE POSTING PLAN sheet forever — never create another.** New batches are appended as rows above HOW TO USE.
 - **Keep it clean (Bjorn's rule):** before adding a new batch (and whenever asked) run `tools/plan_cleanup.py`:
-  delete rows where APPROVE = YES and the POST TIME has passed (already live), and rows where APPROVE = NO
+  delete rows where APPROVE = YES and the POST TIME has passed or STATUS says POSTED (already live), and rows where APPROVE = NO
   (rejected). Blank APPROVE = not reviewed → never deleted. Dry run first, then `--apply`, then read back.
   Only sheet rows are deleted — never the videos in Drive.
 

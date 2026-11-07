@@ -2,6 +2,7 @@
 
 Rules (Bjorn): delete a row when
   - APPROVE is YES and its POST TIME (Philippine time) has passed  -> already live on YouTube
+  - APPROVE is YES and STATUS says POSTED (posted early)            -> already live
   - APPROVE is NO                                                   -> rejected
 Blank APPROVE = not reviewed yet -> never deleted. Only sheet rows are removed, never Drive videos.
 
@@ -42,6 +43,8 @@ for i, row in enumerate(vals[1:], start=2):
     t = post_time(row[4], now) if len(row) > 4 else None
     if ap == "NO":
         todo.append({"row": i, "clip": clip, "approve": "NO", "why": "rejected"})
+    elif ap == "YES" and (len(row) > 7 and row[7].strip().upper().startswith("POSTED")):
+        todo.append({"row": i, "clip": clip, "approve": "YES", "why": "marked POSTED"})
     elif ap == "YES" and t and t <= now:
         todo.append({"row": i, "clip": clip, "approve": "YES", "why": f"posted {row[4]}"})
     else:
