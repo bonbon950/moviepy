@@ -20,7 +20,7 @@ apply = "--apply" in sys.argv
 
 
 def post_time(s, now):
-    m = re.search(r"([A-Z][a-z]{2}) (\d{1,2}) · (\d{1,2}):(\d{2}) (AM|PM)", s)
+    m = re.search(r"([A-Z][a-z]{2}) (\d{1,2}) (?:·|-) (\d{1,2}):(\d{2}) (AM|PM)", s)
     if not m:
         return None
     mon = dt.datetime.strptime(m[1], "%b").month

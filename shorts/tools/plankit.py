@@ -25,12 +25,16 @@ def out_times(t, keep):
 
 def build(S, batch, name, keep, header, *, tags=(), stickers=(), sfx=(), beds=(), zooms=(), flashes=(),
           speakers=(), overrides=(), fixes=None, laugh_label="*EVERYONE LAUGHS*", laugh_names=(),
-          cold_open=True, min_laugh=0.45, skip_laughs=()):
+          cold_open=True, min_laugh=0.45, skip_laughs=(), layout="sandwich", cam=None,
+          laugh_spots=None, me_pos=(540, 770)):
     words = json.load(open(f"{batch}/{name}_words.json"))
     # manual caption overrides: (src_t0, src_t1, "WORDS ...") replace whatever was heard there
     for t0, t1, text in overrides:
         words = [w for w in words if not (t0 <= w["t"] < t1)]
-        toks = text.split(); step = (t1 - t0) / len(toks)
+        toks = text.split()
+        if not toks:      # empty override = remove the words heard there (e.g. in-game radio)
+            continue
+        step = (t1 - t0) / len(toks)
         words += [{"t": t0 + i * step, "e": t0 + (i + 1) * step, "w": tok} for i, tok in enumerate(toks)]
     words.sort(key=lambda w: w["t"])
 
@@ -61,7 +65,7 @@ def build(S, batch, name, keep, header, *, tags=(), stickers=(), sfx=(), beds=()
         for g in tags:
             if c_end - 0.2 <= g["t"] < c_end + 0.95:
                 ln = g["e"] - g["t"]; g["t"] = round(c_end + 0.95, 3); g["e"] = round(g["t"] + ln, 3)
-        tags.append({"t": c_end, "e": c_end + 0.9, "text": "*MOMENTS EARLIER*", "x": 540, "y": 770, "size": 96})
+        tags.append({"t": c_end, "e": c_end + 0.9, "text": "*MOMENTS EARLIER*", "x": me_pos[0], "y": me_pos[1], "size": 96})
     # laughs (mandatory)
     busy = [(g["t"] - 0.3, g["e"] + 0.3) for g in tags]
     li = 0
@@ -77,14 +81,15 @@ def build(S, batch, name, keep, header, *, tags=(), stickers=(), sfx=(), beds=()
                 continue
             label = laugh_names[li % len(laugh_names)] if laugh_names else laugh_label
             def free(sp):  # no sticker/tag already in that zone at that time
-                zone_bottom = sp["y"] > 1300
+                zone_bottom = sp["y"] > (1550 if layout == "split" else 1300)
                 for o in list(stickers) + tags:
                     if o["t"] - 0.2 < a + 1.1 and a < o["e"] + 0.2:
                         oy = o.get("y", 1450 if "emoji" in o else 1144)
-                        if (oy > 1300) == zone_bottom and abs(o.get("x", 540) - sp["x"]) < 420:
+                        if (oy > (1550 if layout == "split" else 1300)) == zone_bottom and abs(o.get("x", 540) - sp["x"]) < 420:
                             return False
                 return True
-            cands = [LAUGH_SPOTS[(li + k) % len(LAUGH_SPOTS)] for k in range(len(LAUGH_SPOTS))]
+            spots_ = laugh_spots or LAUGH_SPOTS
+            cands = [spots_[(li + k) % len(spots_)] for k in range(len(spots_))]
             spot = next((sp for sp in cands if free(sp)), None)
             if spot is None:
                 continue
@@ -103,8 +108,10 @@ def build(S, batch, name, keep, header, *, tags=(), stickers=(), sfx=(), beds=()
     for s in sfx:
         s["file"] = res(s.pop("id"))
     beds = [dict(b, file=res(b.pop("id"))) for b in beds]
-    plan = {"source": f"{batch}/{name}_src.mp4", "keep": keep, "layout": "sandwich", "fonts_dir": f"{S}/fonts",
+    plan = {"source": f"{batch}/{name}_src.mp4", "keep": keep, "layout": layout, "fonts_dir": f"{S}/fonts",
             "header": header, "words": caps, "tags": sorted(tags, key=lambda g: g["t"]), "stickers": list(stickers),
             "zooms": zooms, "flashes": flashes, "sfx": sorted(sfx, key=lambda s: s["t"]), "beds": beds}
+    if cam:
+        plan["cam"] = cam
     json.dump(plan, open(f"{batch}/{name}_plan.json", "w"), indent=1)
     return plan, dur

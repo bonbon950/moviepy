@@ -211,6 +211,18 @@ def main(plan_path, out):
              f"[b]scale=w='trunc({W}*({z})/2)*2':h=-2:eval=frame,crop={W}:{fg_h}[fg];"
              f"[bg][fg]overlay=0:{top}")
         cap_y, head_y = top + fg_h - 120, top // 2 + 10
+    elif layout == "split":  # gameplay streams: facecam (enlarged, zoomable) on top, full gameplay below
+        cx, cy, cw, ch = p["cam"]
+        cam_h = int(round(W * ch / cw / 2)) * 2
+        top = p.get("split_top", 330)
+        game_h = 608
+        v = (f"[0:v]split=3[a][b][c];"
+             f"[a]scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},boxblur=28:2,eq=brightness=-0.1[bg];"
+             f"[b]crop={cw}:{ch}:{cx}:{cy},scale=w='trunc({W}*({z})/2)*2':h=-2:eval=frame:flags=lanczos,"
+             f"crop={W}:{cam_h}[cam];"
+             f"[c]scale={W}:{game_h}[game];"
+             f"[bg][cam]overlay=0:{top}[t1];[t1][game]overlay=0:{top + cam_h}")
+        cap_y, head_y = top + cam_h, top // 2 + 5
     else:  # minimal crop: fill height, crop sides
         v = (f"[0:v]scale=w=-2:h='trunc({H}*({z})/2)*2':eval=frame,crop={W}:{H}")
         cap_y, head_y = int(H * 0.62), 300
@@ -280,7 +292,7 @@ def main(plan_path, out):
               f"loudnorm=I=-10:TP=-1:LRA=9,aresample=48000[aout]")
     fc = v.replace("[0:v]", "[0:v]") + ";" + ";".join(a.replace("[0:a]", "[0:a]") for a in af)
     run(["ffmpeg", "-y", "-v", "error"] + a_in + ["-filter_complex", fc, "-map", "[vout]", "-map", "[aout]",
-         "-c:v", "libx264", "-preset", "medium", "-b:v", "12M", "-minrate", "10M", "-maxrate", "16M", "-bufsize", "24M",
+         "-c:v", "libx264", "-preset", "medium", "-b:v", "12M", "-minrate", "12M", "-maxrate", "12M", "-bufsize", "12M", "-x264-params", "nal-hrd=cbr",
          "-r", str(FPS), "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart",
          "-t", f"{dur:.3f}", out])
     print(f"rendered {out} ({dur:.1f}s)")
