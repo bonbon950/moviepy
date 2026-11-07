@@ -1,10 +1,11 @@
 /**
- * Bjorn's Shorts -> Google Drive helper. Version 3.
+ * Bjorn's Shorts -> Google Drive helper. Version 4.
  * Can ONLY:
  *  - create/find "OUTPUT (...)" folders, list them, upload videos into them,
  *    restore (un-trash) files that belong to an OUTPUT folder;
- *  - read / add rows / update cells in the ONE spreadsheet named "POSTING PLAN".
- * NO delete ability anywhere. Cannot touch any other file or folder.
+ *  - read / add rows / update cells in the ONE spreadsheet named "POSTING PLAN";
+ *  - delete ROWS of that sheet only when they are approved+posted or rejected (checked row by row).
+ * Cannot delete any file or folder. Cannot touch any other file or folder.
  */
 var OUT = /^OUTPUT \(.+\)$/;
 var PLAN_NAME = 'POSTING PLAN';
@@ -82,6 +83,21 @@ function doPost(e) {
       stylePlan(sh3);
       return out({ok: true, firstRow: at, count: rows.length});
     }
+    if (p.action === 'sheet_delete_rows') {
+      // body = JSON [{row: 7, clip: 'CLIP6', approve: 'YES'}, ...]; a row is deleted only if it STILL shows
+      // that clip name and that approval (YES = posted, NO = rejected). Header and HOW TO USE are never deleted.
+      var sh4 = planSheet(p.sheetId);
+      var reqs = JSON.parse(e.postData.contents).sort(function (a, b) { return b.row - a.row; });
+      var v4 = sh4.getDataRange().getDisplayValues(), done = [], skipped = [];
+      for (var k = 0; k < reqs.length; k++) {
+        var q = reqs[k], row = Number(q.row), cur = v4[row - 1];
+        var ap = cur ? String(cur[6]).trim().toUpperCase() : '';
+        var ok = row > 1 && cur && String(cur[0]).trim() === q.clip && String(cur[0]).indexOf('HOW TO USE') !== 0 &&
+                 ap === String(q.approve).toUpperCase() && (ap === 'YES' || ap === 'NO');
+        if (ok) { sh4.deleteRow(row); done.push(q.clip); } else { skipped.push(q.clip); }
+      }
+      return out({ok: true, deleted: done, skipped: skipped});
+    }
     if (p.action === 'sheet_style') {
       stylePlan(planSheet(p.sheetId));
       return out({ok: true});
@@ -129,4 +145,8 @@ function doPost(e) {
 
 function out(o) {
   return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON);
+}
+
+function authorizeSheets() {
+  SpreadsheetApp.openById('12th0-8z61cYyA0eT0HxaCjsn5Avy0DW5H6PyGTnVtx4').getName();
 }

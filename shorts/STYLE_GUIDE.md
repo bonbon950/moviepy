@@ -219,7 +219,13 @@ matching sound effect**.
 - **Timing:** one video per US active window, never all at once. Slots (US Eastern → Philippines, while
   ET = PHT − 13 h): 8:00 AM→9:00 PM, 12:30 PM⭐→1:30 AM, 3:00 PM→4:00 AM, 5:30 PM→6:30 AM,
   **7:00 PM⭐⭐→8:00 AM (best clip)**, 9:00 PM⭐→10:00 AM, 10:30 PM→11:30 AM. Refine with channel analytics.
-- Bjorn does not want to schedule manually → posting must be automatic once he types YES.
+- Bjorn schedules each approved clip himself in the YouTube app using the sheet (copy caption/description,
+  Visibility → Schedule at POST TIME 🇵🇭), then types SCHEDULED.
+- **ONE POSTING PLAN sheet forever — never create another.** New batches are appended as rows above HOW TO USE.
+- **Keep it clean (Bjorn's rule):** before adding a new batch (and whenever asked) run `tools/plan_cleanup.py`:
+  delete rows where APPROVE = YES and the POST TIME has passed (already live), and rows where APPROVE = NO
+  (rejected). Blank APPROVE = not reviewed → never deleted. Dry run first, then `--apply`, then read back.
+  Only sheet rows are deleted — never the videos in Drive.
 
 ## Appendix A — What Bjorn's 14 sample edits showed (scan)
 - All 1080×1920, 30 fps; lengths 30–109 s (only 4/14 in 40–50 s); creators TJR ×7, Kai ×7.
