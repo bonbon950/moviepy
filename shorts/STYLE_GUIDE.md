@@ -186,7 +186,8 @@ matching sound effect**.
 - Create (or reuse) a Google Drive folder in Bjorn's account named **`OUTPUT (<date>)`**,
   e.g. `OUTPUT (November 6, 2026)` — the date the videos are made, in **Philippine time (Asia/Manila)**.
   Same day → same folder. Uploader verified working (68 MB clip in ~2.5 min).
-- Upload all 6–8 videos there. File names: `01_<SHORT_TITLE>.mp4`, `02_...` in ranking order.
+- Upload all 6–8 videos there. File names: **`CLIP1.mp4`, `CLIP2.mp4`, …** in ranking order (Bjorn's request:
+  easy to identify). The same CLIP numbers are used in the POSTING PLAN sheet.
 - Also send a short summary in chat: folder link, and for each video the header, VOD timestamp
   and why the moment is strong.
 - **CHECK before, DOUBLE-CHECK after — every Drive change.** Bjorn wants a clean, organized Drive.
@@ -204,6 +205,21 @@ matching sound effect**.
   this big.
 
 ---
+
+## 13. Posting to YouTube Shorts
+- **Nothing is posted without Bjorn's approval.** Flow: batch → Drive `OUTPUT (date)` → rows added to the
+  Google Sheet **POSTING PLAN** (one sheet, kept simple) → Bjorn watches and types **YES** → it gets posted.
+- Channel: Bjorn's YouTube on blovesarmiento@gmail.com.
+- **Caption (YouTube title):** edgy, provocative, but always true to the clip; built to trigger comments
+  (a take people will argue with, a question, a "be honest…"). Under 100 characters, 1 emoji.
+  e.g. "Y'all would switch up too if you had his money. Stop acting humble 😁"
+- **Description:** hook line + a direct question/CTA ("Who was wrong? 👇", "Tag that friend") + hashtags.
+- **Hashtags (US audience):** creator + crew (#kaicenat #amp #rakai…) + topic (#halloween #nails…) +
+  reach (#kaicenatclips #twitchclips #ampclips #shorts #fyp). 8–12 total.
+- **Timing:** one video per US active window, never all at once. Slots (US Eastern → Philippines, while
+  ET = PHT − 13 h): 8:00 AM→9:00 PM, 12:30 PM⭐→1:30 AM, 3:00 PM→4:00 AM, 5:30 PM→6:30 AM,
+  **7:00 PM⭐⭐→8:00 AM (best clip)**, 9:00 PM⭐→10:00 AM, 10:30 PM→11:30 AM. Refine with channel analytics.
+- Bjorn does not want to schedule manually → posting must be automatic once he types YES.
 
 ## Appendix A — What Bjorn's 14 sample edits showed (scan)
 - All 1080×1920, 30 fps; lengths 30–109 s (only 4/14 in 40–50 s); creators TJR ×7, Kai ×7.
