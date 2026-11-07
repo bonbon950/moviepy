@@ -189,6 +189,9 @@ matching sound effect**.
 - Upload all 6–8 videos there. File names: `01_<SHORT_TITLE>.mp4`, `02_...` in ranking order.
 - Also send a short summary in chat: folder link, and for each video the header, VOD timestamp
   and why the moment is strong.
+- **Never delete or trash anything in Bjorn's Drive on my own.** Only ask to trash an item if it is
+  a true **duplicate** or **nonsense/junk** (e.g. a broken partial upload), and say exactly which file
+  and why. Improved versions are uploaded *next to* the originals only if Bjorn asks — never replace.
 - Upload path: the Apps Script uploader Bjorn installs once (`tools/drive_uploader.gs`) +
   `tools/upload_drive.py`. The Drive connector alone can create the folder but cannot upload files
   this big.

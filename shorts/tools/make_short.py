@@ -280,7 +280,7 @@ def main(plan_path, out):
               f"loudnorm=I=-10:TP=-1:LRA=9,aresample=48000[aout]")
     fc = v.replace("[0:v]", "[0:v]") + ";" + ";".join(a.replace("[0:a]", "[0:a]") for a in af)
     run(["ffmpeg", "-y", "-v", "error"] + a_in + ["-filter_complex", fc, "-map", "[vout]", "-map", "[aout]",
-         "-c:v", "libx264", "-preset", "medium", "-crf", "15", "-minrate", "10M", "-maxrate", "18M", "-bufsize", "24M",
+         "-c:v", "libx264", "-preset", "medium", "-b:v", "12M", "-minrate", "10M", "-maxrate", "16M", "-bufsize", "24M",
          "-r", str(FPS), "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart",
          "-t", f"{dur:.3f}", out])
     print(f"rendered {out} ({dur:.1f}s)")

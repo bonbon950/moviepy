@@ -10,7 +10,19 @@ URL, FOLDER, files = sys.argv[1], sys.argv[2], sys.argv[3:]
 CHUNK = 6 * 1024 * 1024  # multiple of 256 KiB, as Drive requires
 
 
-def call(params, body=b""):
+def call(params, body=b"", tries=5):
+    import time
+    for k in range(tries):
+        try:
+            return _call(params, body)
+        except Exception as e:  # network hiccup: back off and retry the same request
+            if k == tries - 1:
+                raise
+            print(f"  retry {k + 1} after {type(e).__name__}", flush=True)
+            time.sleep(2 ** (k + 1))
+
+
+def _call(params, body=b""):
     q = URL + "?" + urllib.parse.urlencode(params)
     req = urllib.request.Request(q, data=body or b" ", method="POST",
                                  headers={"Content-Type": "text/plain"})

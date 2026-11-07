@@ -8,7 +8,8 @@ usage (as module): to_captions(words, keep, default_color="#FFFFFF", speaker_col
 import re
 
 CENSOR = {
-    "fuck": "F*CK", "fucking": "F*CKING", "fucked": "F*CKED", "motherfucker": "MOTHERF*CKER",
+    "fuck": "F*CK", "fucking": "F*CKING", "fuckin": "F*CKIN", "fucker": "F*CKER", "fuckers": "F*CKERS",
+    "motherfucking": "MOTHERF*CKING", "motherfuckin": "MOTHERF*CKIN", "fucks": "F*CKS", "shitty": "SH*TTY", "bullshit": "BULLSH*T", "fucked": "F*CKED", "motherfucker": "MOTHERF*CKER",
     "shit": "SH*T", "bitch": "B*TCH", "bitches": "B*TCHES", "nigga": "N*GGA", "niggas": "N*GGAS",
     "nigger": "N*GGA", "ass": "A*S", "damn": "DAMN", "dick": "D*CK", "pussy": "P*SSY", "hoe": "H*E",
 }

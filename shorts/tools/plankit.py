@@ -57,6 +57,10 @@ def build(S, batch, name, keep, header, *, tags=(), stickers=(), sfx=(), beds=()
         c_end = keep[0][1] - keep[0][0]
         sfx += [{"t": c_end - 0.15, "id": "record_scratch", "gain_db": -4},
                 {"t": c_end, "id": "whoosh", "gain_db": -6}]
+        # nothing else may share the screen with *MOMENTS EARLIER*: push colliding tags just after it
+        for g in tags:
+            if c_end - 0.2 <= g["t"] < c_end + 0.95:
+                ln = g["e"] - g["t"]; g["t"] = round(c_end + 0.95, 3); g["e"] = round(g["t"] + ln, 3)
         tags.append({"t": c_end, "e": c_end + 0.9, "text": "*MOMENTS EARLIER*", "x": 540, "y": 770, "size": 96})
     # laughs (mandatory)
     busy = [(g["t"] - 0.3, g["e"] + 0.3) for g in tags]
@@ -72,7 +76,18 @@ def build(S, batch, name, keep, header, *, tags=(), stickers=(), sfx=(), beds=()
             if any(x <= a <= y for x, y in busy) or any(abs(a - s) < 1.5 for s in skip_laughs):
                 continue
             label = laugh_names[li % len(laugh_names)] if laugh_names else laugh_label
-            spot = LAUGH_SPOTS[li % len(LAUGH_SPOTS)]
+            def free(sp):  # no sticker/tag already in that zone at that time
+                zone_bottom = sp["y"] > 1300
+                for o in list(stickers) + tags:
+                    if o["t"] - 0.2 < a + 1.1 and a < o["e"] + 0.2:
+                        oy = o.get("y", 1450 if "emoji" in o else 1144)
+                        if (oy > 1300) == zone_bottom and abs(o.get("x", 540) - sp["x"]) < 420:
+                            return False
+                return True
+            cands = [LAUGH_SPOTS[(li + k) % len(LAUGH_SPOTS)] for k in range(len(LAUGH_SPOTS))]
+            spot = next((sp for sp in cands if free(sp)), None)
+            if spot is None:
+                continue
             tags.append(dict({"t": a, "e": min(a + 1.1, dur), "text": label, "box": "#8B0000"}, **spot))
             flashes.append({"t": a, "d": 0.12, "color": "pink"})
             sfx.append({"t": a, "id": LAUGH_SFX[li % len(LAUGH_SFX)], "gain_db": -13, "dur": 1.1})
