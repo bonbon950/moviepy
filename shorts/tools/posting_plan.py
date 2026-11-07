@@ -19,6 +19,10 @@ if cmd == "read":
     for i, row in enumerate(r["values"], 1):
         print(i, " | ".join(c.replace("\n", " ")[:60] for c in row))
 elif cmd == "set":
+    # the web app decodes URL parameters as Latin-1 -> emoji/symbols get garbled. Only plain ASCII here.
+    # (append is safe: rows go in the body as JSON with \uXXXX escapes)
+    if not sys.argv[5].isascii():
+        sys.exit("refusing: 'set' only supports plain text (no emoji/symbols)")
     print(u.call({"action": "sheet_set", "sheetId": SHEET_ID, "row": sys.argv[3], "col": sys.argv[4],
                   "value": sys.argv[5]}))
 elif cmd == "append":
