@@ -1,32 +1,55 @@
 /**
- * Bjorn's Shorts -> Google Drive uploader (Google Apps Script web app).
+ * Bjorn's Shorts -> Google Drive helper (Google Apps Script web app). Version 2.
  *
- * One-time setup (about 3 minutes, on a computer):
- *   1. Go to https://script.google.com -> New project. Name it "Shorts Uploader".
- *   2. Delete everything in Code.gs, paste this whole file, click Save.
- *   3. Deploy -> New deployment -> type "Web app".
- *        Execute as: Me      Who has access: Anyone
- *      -> Deploy -> Authorize access (choose blovesarmiento@gmail.com -> Advanced -> Go to project -> Allow).
- *   4. Copy the "Web app URL" (https://script.google.com/macros/s/.../exec) and send it to Claude.
+ * Can ONLY: create/find folders named "OUTPUT (...)", list what is inside them, upload video files
+ * into them, and restore (un-trash) files that belong to an OUTPUT folder.
+ * It has NO delete/trash ability and cannot see or touch anything outside OUTPUT folders.
  *
- * What it can do: ONLY create folders named "OUTPUT (...)" and upload video files into them.
- * It cannot read, list, change or delete anything else in your Drive.
- * Treat the URL like a password; to revoke it: Deploy -> Manage deployments -> Archive.
+ * Update an existing deployment (keeps the same URL):
+ *   Paste this file over Code.gs -> Save -> Deploy -> Manage deployments -> pencil (Edit)
+ *   -> Version: New version -> Deploy (re-authorize if asked).
  */
+
+var OUT = /^OUTPUT \(.+\)$/;
+
+function isOutputFile(file) {
+  var ps = file.getParents();
+  while (ps.hasNext()) { if (OUT.test(ps.next().getName())) return true; }
+  return false;
+}
 
 function doPost(e) {
   var p = e.parameter;
   try {
     if (p.action === 'folder') {
-      if (!/^OUTPUT \(.+\)$/.test(p.name || '')) return out({error: 'folder name must be OUTPUT (...)'});
+      if (!OUT.test(p.name || '')) return out({error: 'folder name must be OUTPUT (...)'});
       var it = DriveApp.getFoldersByName(p.name);
       var f = it.hasNext() ? it.next() : DriveApp.createFolder(p.name);
       return out({id: f.getId(), url: f.getUrl()});
     }
-    if (p.action === 'start') {
+    if (p.action === 'list') {  // everything in one OUTPUT folder, including trashed items
       var folder = DriveApp.getFolderById(p.folderId);
-      if (!/^OUTPUT \(.+\)$/.test(folder.getName())) return out({error: 'not an OUTPUT folder'});
+      if (!OUT.test(folder.getName())) return out({error: 'not an OUTPUT folder'});
+      var files = [], fi = folder.getFiles();
+      while (fi.hasNext()) {
+        var x = fi.next();
+        files.push({id: x.getId(), name: x.getName(), size: x.getSize(), trashed: x.isTrashed()});
+      }
+      return out({files: files});
+    }
+    if (p.action === 'restore') {  // un-trash a file that lives in an OUTPUT folder
+      var file = DriveApp.getFileById(p.fileId);
+      if (!isOutputFile(file)) return out({error: 'file is not in an OUTPUT folder'});
+      if (!file.isTrashed()) return out({ok: true, note: 'already not in trash', name: file.getName()});
+      file.setTrashed(false);
+      return out({ok: true, name: file.getName()});
+    }
+    if (p.action === 'start') {
+      var folder2 = DriveApp.getFolderById(p.folderId);
+      if (!OUT.test(folder2.getName())) return out({error: 'not an OUTPUT folder'});
       if (!/^video\//.test(p.mime || '')) return out({error: 'videos only'});
+      var dup = folder2.getFilesByName(p.name);
+      while (dup.hasNext()) { if (!dup.next().isTrashed()) return out({error: 'duplicate: same name already in folder'}); }
       var r = UrlFetchApp.fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable', {
         method: 'post',
         contentType: 'application/json; charset=UTF-8',

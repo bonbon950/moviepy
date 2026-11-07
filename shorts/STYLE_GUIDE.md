@@ -189,6 +189,13 @@ matching sound effect**.
 - Upload all 6–8 videos there. File names: `01_<SHORT_TITLE>.mp4`, `02_...` in ranking order.
 - Also send a short summary in chat: folder link, and for each video the header, VOD timestamp
   and why the moment is strong.
+- **CHECK before, DOUBLE-CHECK after — every Drive change.** Bjorn wants a clean, organized Drive.
+  - Before uploading: list the OUTPUT folder; never upload a file whose name is already there
+    (the uploader skips it automatically) and never create a second folder for the same date.
+  - After uploading: list the folder again and confirm every file is there, with the right size,
+    and that there are no extras.
+  - Restoring from trash (helper v2 `restore`): only files from OUTPUT folders, and only when
+    Bjorn asks or after a mistake of mine; list the folder afterwards to confirm.
 - **Never delete or trash anything in Bjorn's Drive on my own.** Only ask to trash an item if it is
   a true **duplicate** or **nonsense/junk** (e.g. a broken partial upload), and say exactly which file
   and why. Improved versions are uploaded *next to* the originals only if Bjorn asks — never replace.
