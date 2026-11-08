@@ -31,6 +31,11 @@ def run(cmd):
     return r
 
 
+def fpath(path):
+    """A file path safe inside an ffmpeg filtergraph (Windows drive colons and backslashes)."""
+    return "'" + str(path).replace("\\", "/").replace(":", r"\:") + "'"
+
+
 def ass_color(hexstr, alpha="00"):
     h = hexstr.lstrip("#")
     return f"&H{alpha}{h[4:6]}{h[2:4]}{h[0:2]}&".upper()
@@ -240,11 +245,11 @@ def main(plan_path, out):
         hd["png"] = os.path.join(tmp, "header.png")
         render_header_png(hd, p["fonts_dir"], hd["png"], max_w=int((W - 60) / 1.18))
     build_ass(p, dur, ass, cap_y, head_y)
-    v += f",ass={ass}:fontsdir={p['fonts_dir']}"
+    v += f",ass={fpath(ass)}:fontsdir={fpath(p['fonts_dir'])}"
     if hd.get("png"):
         # slam-in: 160% -> 92% -> 100% over 0.3 s, then holds
         sc = "if(lt(t,0.14),1.18-0.26*t/0.14,if(lt(t,0.3),0.92+0.08*(t-0.14)/0.16,1))"
-        v += (f"[pre];movie={hd['png']},loop=-1:1:0,setpts=N/{FPS}/TB,"
+        v += (f"[pre];movie={fpath(hd['png'])},loop=-1:1:0,setpts=N/{FPS}/TB,"
               f"scale=w='trunc(iw*({sc})/2)*2':h=-2:eval=frame[hdr];"
               f"[pre][hdr]overlay=x='(W-w)/2':y='{head_y}-h/2':eval=frame:shortest=1")
     for k, st in enumerate(p.get("stickers", [])):
@@ -255,7 +260,7 @@ def main(plan_path, out):
         # pop in (40% -> 120% -> 100%) then a gentle bob; only visible between t0 and t1
         sc = (f"if(lt(t,{t0}),0.4,if(lt(t-{t0},0.1),0.4+0.8*(t-{t0})/0.1,if(lt(t-{t0},0.2),"
               f"1.2-0.2*(t-{t0}-0.1)/0.1,1+0.04*sin(2*PI*(t-{t0})*1.6))))")
-        v += (f"[m{k}];movie={png},loop=-1:1:0,setpts=N/{FPS}/TB,"
+        v += (f"[m{k}];movie={fpath(png)},loop=-1:1:0,setpts=N/{FPS}/TB,"
               f"scale=w='max(2,trunc(iw*({sc})/2)*2)':h='max(2,trunc(ih*({sc})/2)*2)':eval=frame[s{k}];"
               f"[m{k}][s{k}]overlay=x='{st.get('x', W // 2)}-w/2':y='{st.get('y', 1450)}-h/2':eval=frame:"
               f"enable='between(t,{t0},{t1})'")

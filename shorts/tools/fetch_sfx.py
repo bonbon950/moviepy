@@ -1,13 +1,15 @@
-"""Build the SFX library from shorts/sfx_manifest.tsv (first Myinstants search hit per id).
+"""Build a sound library from a manifest (first Myinstants search hit per id, or a pinned /media/ path).
 
-usage: fetch_sfx.py OUT_DIR
+usage: fetch_sfx.py OUT_DIR [MANIFEST]   (default MANIFEST: shorts/sfx_manifest.tsv)
+  e.g. fetch_sfx.py WORK/sfx_lib ; fetch_sfx.py WORK/beds shorts/beds_manifest.tsv ;
+       fetch_sfx.py WORK/beats shorts/beats_manifest.tsv
 Needs www.myinstants.com allowed in the environment. Skips files that already exist.
 """
 import csv, os, re, subprocess, sys, urllib.parse, urllib.request
 
 out = sys.argv[1]
 os.makedirs(out, exist_ok=True)
-man = os.path.join(os.path.dirname(__file__), "..", "sfx_manifest.tsv")
+man = sys.argv[2] if len(sys.argv) > 2 else os.path.join(os.path.dirname(__file__), "..", "sfx_manifest.tsv")
 UA = {"User-Agent": "Mozilla/5.0"}
 ok = fail = 0
 for row in csv.DictReader(open(man), delimiter="\t"):
@@ -15,7 +17,7 @@ for row in csv.DictReader(open(man), delimiter="\t"):
     if os.path.exists(dst):
         ok += 1; continue
     try:
-        q = row["myinstants_search"]
+        q = row.get("myinstants_search") or row["myinstants_path"]
         if q.startswith("/media/"):  # pinned exact file
             m = re.match(r".+", q)
         else:
