@@ -267,6 +267,11 @@ approved renders in Drive folder `OUTPUT (Style Samples v2 - rev2)`.
   size 98, y≈440, ALL CAPS, short (≤ 5–6 words). Transition: **soft fade in + gentle grow 88% → 100% (~0.2 s),
   soft fade out. Never slide/swipe in** (Bjorn: the left-to-right swipe is not easy on the eyes).
   Example arc: "HE WORKED ALL NIGHT FOR THIS" → "TOMMY VERCETTI GOT A REAL JOB" → "GTA RULE: EVERY SALE = MONEY" → "MOMENT OF TRUTH…".
+  **The style is NOT GTA-themed (Bjorn's rule).** Narrator lines, pop-ups, headers and SFX always come from what
+  actually happens in *that* stream. The GTA wording in the examples exists only because those streams were GTA
+  (GTA-roleplay IRL and GTA 3 gameplay). For any other stream: no GTA references, GTA graphics or GTA sounds
+  (e.g. `gta_wasted`, `mission_failed`) unless the moment itself is about GTA. Non-GTA example: "HE ORDERED THE
+  WHOLE MENU" → "THE BILL:" (pop-up: the receipt) → "$400."
 - **Evidence pop-ups** (`insets`): zoomed crop of the frame that proves the joke (HUD money, a price, a phone
   screen, a reaction) — white border, pops in, shown in the bottom band. Check the crop on a frame first: overlay
   positions can shift between parts of a stream.
