@@ -28,8 +28,10 @@ EMOJI = {
     "1fae3": "Face with peeking eye", "1f9cd": "Person standing", "1f6ab": "Prohibited",
     "1f94a": "Boxing glove", "1f35f": "French fries", "1f354": "Hamburger", "1f4f1": "Mobile phone",
     "1f3c1": "Chequered flag", "1f697": "Automobile", "1f37a": "Beer mug", "1f6f5": "Motor scooter",
+    "2615": "Hot beverage", "1f32f": "Burrito", "1f45f": "Running shoe", "1f64f": "Folded hands",
+    "1f620": "Angry face",
 }
-SKIN = {"1f485", "1f9db", "1f9cd"}  # these live under Default/3D
+SKIN = {"1f485", "1f9db", "1f9cd", "1f64f"}  # these live under Default/3D
 
 out = sys.argv[1]
 os.makedirs(out, exist_ok=True)

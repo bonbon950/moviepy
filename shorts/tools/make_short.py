@@ -286,7 +286,10 @@ def main(plan_path, out):
         cx, cy, cw, ch = ins["crop"]
         t0, t1, s = ins["t"], ins["e"], ins.get("scale", 2.0)
         sc = f"if(lt(t,{t0}),0.5,if(lt(t-{t0},0.1),0.5+0.7*(t-{t0})/0.1,if(lt(t-{t0},0.2),1.2-0.2*(t-{t0}-0.1)/0.1,1)))"
-        v += (f"[n{k}];movie={fpath(base)},setpts=PTS-STARTPTS,crop={cw}:{ch}:{cx}:{cy},"
+        # "png": a frozen still (e.g. a chat line that would scroll away in a live crop); crop[2:] = its size
+        src_in = (f"movie={fpath(ins['png'])},loop=-1:1:0,setpts=N/{FPS}/TB" if ins.get("png") else
+                  f"movie={fpath(base)},setpts=PTS-STARTPTS,crop={cw}:{ch}:{cx}:{cy}")
+        v += (f"[n{k}];{src_in},"
               f"scale={int(cw * s) // 2 * 2}:{int(ch * s) // 2 * 2}:flags=lanczos,pad=iw+16:ih+16:8:8:white,"
               f"scale=w='max(2,trunc(iw*({sc})/2)*2)':h='max(2,trunc(ih*({sc})/2)*2)':eval=frame[i{k}];"
               f"[n{k}][i{k}]overlay=x='{ins.get('x', W // 2)}-w/2':y='{ins.get('y', 1600)}-h/2':eval=frame:"
