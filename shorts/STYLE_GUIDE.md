@@ -1,7 +1,9 @@
 # Bjorn's Shorts Rulebook
 
 The rulebook for every short I edit for Bjorn. **Every rule here comes from Bjorn's own instructions,**
-his 14 sample edits, his 3 reference videos, and his notes on the test edits. Version 1.2 (growth plan from Nov 11, 2026: section 14).
+his 14 sample edits, his 3 reference videos, and his notes on the test edits. Version 2.0.
+**From Nov 11, 2026: section 14 (growth plan) and section 15 (editing style v2, approved by Bjorn Nov 8) override
+any older rule they disagree with.** Before Nov 11 nothing changes.
 When a rule and a habit disagree, the rule wins. Tested on: *"A POWER RANGER BROKE KAI'S NAIL 😭"*.
 
 ---
@@ -244,6 +246,36 @@ and the POSTING PLAN stay exactly as they are.
 **Why (data from Nov 8):** YouTube Studio showed no copyright notices on the recent Shorts, but everything since
 Oct 23 stalls at 0–27 views (only the Oct 22–24 Shorts reached 1.1–1.4K). Likely causes: reused-content limits on
 heavily clipped streamer content and too many posts per day on a small channel. US is already the #2 country.
+
+## 15. ⭐ Editing style v2 — "original story cut" (approved by Bjorn Nov 8, 2026; applies from Nov 11)
+Goal: **originality + shorter Shorts**, so the Shorts feed tests and pushes us again. Reference edits:
+`edits/sample_v2.py` (SAMPLE1 $0 shift) and `edits/samples_v2_more.py` (SAMPLE2 ice cream, SAMPLE3 bar);
+approved renders in Drive folder `OUTPUT (Style Samples v2 - rev2)`.
+
+**Overrides (old rule → v2 rule):**
+| Topic | Old | **v2 (from Nov 11)** |
+|---|---|---|
+| Length | 40–50 s | **25–35 s** |
+| Layout | blur sandwich | **`layout: "story"`** — bigger, closer 4:3 frame (1080×810 at y=540) with thin white borders; header on top (y≈200), narrator band (y≈440), captions in the lower part of the frame |
+| Music | quiet viral bed | **No copyrighted music** — original audio + SFX only (or YouTube Audio Library tracks) |
+| Action tag position | eye level, sometimes bottom band | **Always at eye level** inside the frame, next to faces (y≈740–820; left / center / right). Laugh-tag spots too. Never in the bottom band |
+| Niche | Kai, TJR, Rakai, Fanum… | **Kai / AMP IRL only** until the channel is being pushed again |
+| Header | intriguing claim | **Makes a claim or takes a side** people can argue with (still true, still paid off) |
+
+**New, required on every video:**
+- **Narrator lines** (`notes`): our own commentary that tells the story on every beat — yellow Anton on a black bar,
+  size 98, y≈440, ALL CAPS, short (≤ 5–6 words). Transition: **soft fade in + gentle grow 88% → 100% (~0.2 s),
+  soft fade out. Never slide/swipe in** (Bjorn: the left-to-right swipe is not easy on the eyes).
+  Example arc: "HE WORKED ALL NIGHT FOR THIS" → "TOMMY VERCETTI GOT A REAL JOB" → "GTA RULE: EVERY SALE = MONEY" → "MOMENT OF TRUTH…".
+- **Evidence pop-ups** (`insets`): zoomed crop of the frame that proves the joke (HUD money, a price, a phone
+  screen, a reaction) — white border, pops in, shown in the bottom band. Check the crop on a frame first: overlay
+  positions can shift between parts of a stream.
+- **Restructured story:** open on the payoff line (cold open), rewind, tell it tight, and **end on a loop** — the
+  last line flows back into the opening line so viewers rewatch.
+
+**Unchanged:** always a header; one-word moving captions with speaker colors, censoring and money in green; every
+laugh tagged + SFX; SFX heavy in the first seconds; emoji stickers (bottom band is fine for emoji); punch zooms and
+color flashes; 1080×1920 / 30 fps / ≥ 10 Mbps; checklist (section 11) with the v2 numbers above.
 
 ## Appendix A — What Bjorn's 14 sample edits showed (scan)
 - All 1080×1920, 30 fps; lengths 30–109 s (only 4/14 in 40–50 s); creators TJR ×7, Kai ×7.

@@ -60,6 +60,7 @@ def build_ass(p, dur, path, cap_y, head_y):
         "Style: Cap,Anton,132,&H00FFFFFF&,&H000000FF&,&H00000000&,&H90000000&,0,0,0,0,100,100,1,0,1,8,3,5,40,40,0,1",
         "Style: Tag,Anton,110,&H00FFFFFF&,&H000000FF&,&H00000000&,&H90000000&,0,0,0,0,100,100,1,0,1,8,3,5,40,40,0,1",
         "Style: TagBox,Anton,110,&H00FFFFFF&,&H000000FF&,&H000000AA&,&H000000AA&,0,0,0,0,100,100,1,0,3,14,0,5,40,40,0,1",
+        "Style: Note,Anton,98,&H0000E6FF&,&H000000FF&,&H00000000&,&H00000000&,0,0,0,0,100,100,1,0,3,16,0,5,40,40,0,1",
         "", "[Events]", "Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text",
     ]
     if hd.get("lines") and not hd.get("png"):
@@ -88,6 +89,13 @@ def build_ass(p, dur, path, cap_y, head_y):
                f"\\t(180,{max(200, dur_ms)},\\fscx108\\fscy108)}}")
         lines.append(f"Dialogue: 4,{ts(g['t'])},{ts(g['e'])},{style},,0,0,0,,"
                      f"{{\\pos({x},{y}){fs}{rot}{extra}}}{pop}{g['text'].upper()}")
+    for n in p.get("notes", []):
+        # v2 narrator line (our own commentary): yellow on a black bar, never hides captions.
+        # Easy on the eyes: no sliding — soft fade in with a gentle ease-out grow (88% -> 100%), soft fade out.
+        x, y = n.get("x", W // 2), n.get("y", 440)
+        fs = f"\\fs{n['size']}" if n.get("size") else ""
+        mv = f"\\pos({x},{y})\\fad(160,140)\\fscx88\\fscy88\\t(0,180,0.5,\\fscx100\\fscy100)"
+        lines.append(f"Dialogue: 6,{ts(n['t'])},{ts(n['e'])},Note,,0,0,0,,{{{mv}{fs}}}{n['text'].upper()}")
     open(path, "w").write("\n".join(lines) + "\n")
 
 
@@ -228,6 +236,15 @@ def main(plan_path, out):
              f"[c]scale={W}:{game_h}[game];"
              f"[bg][cam]overlay=0:{top}[t1];[t1][game]overlay=0:{top + cam_h}")
         cap_y, head_y = top + cam_h, top // 2 + 5
+    elif layout == "story":  # v2 original look: bigger, closer frame (4:3) with a narrator band above it
+        fg_h = 810
+        top = p.get("story_top", 540)
+        v = (f"[0:v]split[a][b];"
+             f"[a]scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},boxblur=34:2,eq=brightness=-0.22[bg];"
+             f"[b]scale=w=-2:h='trunc({fg_h}*({z})/2)*2':eval=frame,crop={W}:{fg_h}[fg];"
+             f"[bg][fg]overlay=0:{top},drawbox=x=0:y={top - 6}:w={W}:h=6:c=white@0.9:t=fill,"
+             f"drawbox=x=0:y={top + fg_h}:w={W}:h=6:c=white@0.9:t=fill")
+        cap_y, head_y = top + fg_h - 110, p.get("head_y", 190)
     else:  # minimal crop: fill height, crop sides
         v = (f"[0:v]scale=w=-2:h='trunc({H}*({z})/2)*2':eval=frame,crop={W}:{H}")
         cap_y, head_y = int(H * 0.62), 300
@@ -263,6 +280,16 @@ def main(plan_path, out):
         v += (f"[m{k}];movie={fpath(png)},loop=-1:1:0,setpts=N/{FPS}/TB,"
               f"scale=w='max(2,trunc(iw*({sc})/2)*2)':h='max(2,trunc(ih*({sc})/2)*2)':eval=frame[s{k}];"
               f"[m{k}][s{k}]overlay=x='{st.get('x', W // 2)}-w/2':y='{st.get('y', 1450)}-h/2':eval=frame:"
+              f"enable='between(t,{t0},{t1})'")
+    for k, ins in enumerate(p.get("insets", [])):
+        # v2 "evidence" inset: a zoomed crop of the frame (same timeline), white border, pops in
+        cx, cy, cw, ch = ins["crop"]
+        t0, t1, s = ins["t"], ins["e"], ins.get("scale", 2.0)
+        sc = f"if(lt(t,{t0}),0.5,if(lt(t-{t0},0.1),0.5+0.7*(t-{t0})/0.1,if(lt(t-{t0},0.2),1.2-0.2*(t-{t0}-0.1)/0.1,1)))"
+        v += (f"[n{k}];movie={fpath(base)},setpts=PTS-STARTPTS,crop={cw}:{ch}:{cx}:{cy},"
+              f"scale={int(cw * s) // 2 * 2}:{int(ch * s) // 2 * 2}:flags=lanczos,pad=iw+16:ih+16:8:8:white,"
+              f"scale=w='max(2,trunc(iw*({sc})/2)*2)':h='max(2,trunc(ih*({sc})/2)*2)':eval=frame[i{k}];"
+              f"[n{k}][i{k}]overlay=x='{ins.get('x', W // 2)}-w/2':y='{ins.get('y', 1600)}-h/2':eval=frame:"
               f"enable='between(t,{t0},{t1})'")
     v += ",format=yuv420p[vout]"
 
