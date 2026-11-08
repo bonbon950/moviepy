@@ -1,7 +1,7 @@
 # Bjorn's Shorts Rulebook
 
 The rulebook for every short I edit for Bjorn. **Every rule here comes from Bjorn's own instructions,**
-his 14 sample edits, his 3 reference videos, and his notes on the test edits. Version 1.1.
+his 14 sample edits, his 3 reference videos, and his notes on the test edits. Version 1.2 (growth plan from Nov 11, 2026: section 14).
 When a rule and a habit disagree, the rule wins. Tested on: *"A POWER RANGER BROKE KAI'S NAIL 😭"*.
 
 ---
@@ -226,6 +226,24 @@ matching sound effect**.
   delete rows where APPROVE = YES and the POST TIME has passed or STATUS says POSTED (already live), and rows where APPROVE = NO
   (rejected). Blank APPROVE = not reviewed → never deleted. Dry run first, then `--apply`, then read back.
   Only sheet rows are deleted — never the videos in Drive.
+
+## 14. ⭐ Growth plan — starting November 11, 2026 (Bjorn's decision, Nov 8)
+**Before Nov 11, 2026: change nothing.** The 10 Shorts already scheduled (last one live Tue Nov 10, 10:00 AM 🇵🇭)
+and the POSTING PLAN stay exactly as they are.
+
+**From Nov 11, 2026 on, this section overrides section 13 where they disagree:**
+- **Post 1–2 Shorts per day — never 6+.** Still edit 6–8 SOLID videos per material (section 2), but spread them
+  over the next days; put each in the strongest US slot (7:00 PM ET ⭐⭐ first, then 12:30 PM or 9:00 PM ET).
+- **More original framing:** commentary/story-style headers and captions with a take, not plain labels; strongly
+  prefer moments other clippers haven't posted yet. Goal: **lots of US viewers.**
+- **Track every post:** check its first-hour views in the **STATS** tab of the POSTING PLAN (hourly snapshots from
+  the Drive helper v5, read-only YouTube access) and compare with the channel's other Shorts.
+- **Weekly report to Bjorn:** US share of views, average % watched, best/worst Shorts and why, best time slots,
+  what to post more/less of. Suggestions only — nothing changes on the channel without Bjorn.
+
+**Why (data from Nov 8):** YouTube Studio showed no copyright notices on the recent Shorts, but everything since
+Oct 23 stalls at 0–27 views (only the Oct 22–24 Shorts reached 1.1–1.4K). Likely causes: reused-content limits on
+heavily clipped streamer content and too many posts per day on a small channel. US is already the #2 country.
 
 ## Appendix A — What Bjorn's 14 sample edits showed (scan)
 - All 1080×1920, 30 fps; lengths 30–109 s (only 4/14 in 40–50 s); creators TJR ×7, Kai ×7.
