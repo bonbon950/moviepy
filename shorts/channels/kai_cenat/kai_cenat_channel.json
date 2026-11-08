@@ -8,7 +8,7 @@
   "edits_dir": "edits",
   "timezone": "Asia/Manila",
 
-  "drive_output_folder": "OUTPUT ({date})",
+  "drive_output_folder": "KAI CENAT - OUTPUT ({date})",
   "posting_plan_sheet_name": "POSTING PLAN",
   "posting_plan_sheet_id": "12th0-8z61cYyA0eT0HxaCjsn5Avy0DW5H6PyGTnVtx4",
 
@@ -17,7 +17,7 @@
 
   "_notes": [
     "The uploader web-app URL is PRIVATE: it lives only in uploader_url_file on the PC (never in this repo).",
-    "drive_output_folder / posting_plan_sheet_name keep the names already used in this channel's Google Drive.",
+    "Drive folders renamed 2026-11-08 to KAI CENAT - OUTPUT (...); the sheet keeps its name POSTING PLAN.",
     "Each channel has its own Google account, Drive, uploader script copy, POSTING PLAN sheet and YouTube access."
   ]
 }

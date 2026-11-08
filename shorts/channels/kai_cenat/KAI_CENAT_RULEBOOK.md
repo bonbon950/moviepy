@@ -33,7 +33,7 @@ Creators: **Kai Cenat, TJR, Duke Dennis, Rakai, Fanum** (and their crews).
 | Crop | **Minimal** — never crop so much it disturbs the viewer |
 | Twitch chat / overlays | **Keep visible** |
 | Export | ≥ 10 Mbps H.264, AAC 192k, loud and consistent (target −10 LUFS, −1 dBTP) |
-| Delivery | Upload every video to Bjorn's Google Drive folder **`OUTPUT (<date>)`** |
+| Delivery | Upload every video to Bjorn's Google Drive folder **`KAI CENAT - OUTPUT (<date>)`** |
 
 **Never:** CapCut end card or watermark · garbled or wrong captions · uncensored curse words in
 captions · a header that lies about the clip · nonsense SFX that don't fit · new/unknown music ·
@@ -187,8 +187,8 @@ matching sound effect**.
 ---
 
 ## 12. Delivery
-- Create (or reuse) a Google Drive folder in Bjorn's account named **`OUTPUT (<date>)`**,
-  e.g. `OUTPUT (November 6, 2026)` — the date the videos are made, in **Philippine time (Asia/Manila)**.
+- Create (or reuse) a Google Drive folder in Bjorn's account named **`KAI CENAT - OUTPUT (<date>)`**,
+  e.g. `KAI CENAT - OUTPUT (November 6, 2026)` — the date the videos are made, in **Philippine time (Asia/Manila)**.
   Same day → same folder. Uploader verified working (68 MB clip in ~2.5 min).
 - Upload all 6–8 videos there. File names: **`CLIP1.mp4`, `CLIP2.mp4`, …** in ranking order (Bjorn's request:
   easy to identify). The same CLIP numbers are used in the POSTING PLAN sheet.
@@ -211,7 +211,7 @@ matching sound effect**.
 ---
 
 ## 13. Posting to YouTube Shorts
-- **Nothing is posted without Bjorn's approval.** Flow: batch → Drive `OUTPUT (date)` → rows added to the
+- **Nothing is posted without Bjorn's approval.** Flow: batch → Drive `KAI CENAT - OUTPUT (date)` → rows added to the
   Google Sheet **POSTING PLAN** (one sheet, kept simple) → Bjorn watches and types **YES** → it gets posted.
 - Channel: **KaiCentralClip** (formerly The13Clips), Bjorn's YouTube on blovesarmiento@gmail.com.
 - **Caption (YouTube title):** edgy, provocative, but always true to the clip; built to trigger comments
@@ -252,7 +252,7 @@ heavily clipped streamer content and too many posts per day on a small channel. 
 ## 15. ⭐ Editing style v2 — "original story cut" (approved by Bjorn Nov 8, 2026; applies from Nov 11)
 Goal: **originality + shorter Shorts**, so the Shorts feed tests and pushes us again. Reference edits:
 `edits/kai_cenat_sample_v2.py` (SAMPLE1 $0 shift) and `edits/kai_cenat_samples_v2_more.py` (SAMPLE2 ice cream, SAMPLE3 bar);
-approved renders in Drive folder `OUTPUT (Style Samples v2 - rev2)`.
+approved renders in Drive folder `KAI CENAT - OUTPUT (Style Samples v2 - rev2)`.
 
 **Overrides (old rule → v2 rule):**
 | Topic | Old | **v2 (from Nov 11)** |
