@@ -21,9 +21,9 @@ for p in parts:
                               capture_output=True, text=True).stdout)
     pm.append([round(t, 2), round(t + du, 2), vod[os.path.basename(p)[:-4]]]); t += du
 json.dump(pm, open(f"{d}/{name}_parts.json", "w"))
-subprocess.run(["python3", f"{T}/words.py", src, f"{d}/{name}_words.json"], check=True,
+subprocess.run([sys.executable, f"{T}/words.py", src, f"{d}/{name}_words.json"], check=True,
                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-lg = subprocess.run(["python3", f"{T}/tagaudio.py", src, "1.0", "0.5", "0.25"], capture_output=True, text=True).stdout
+lg = subprocess.run([sys.executable, f"{T}/tagaudio.py", src, "1.0", "0.5", "0.25"], capture_output=True, text=True).stdout
 open(f"{d}/{name}_laughs.txt", "w").write("\n".join(l for l in lg.splitlines()
     if any(k in l for k in ("Laugh", "Giggle", "Chuckle", "Snicker", "Scream", "Shout", "Yell"))))
 subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", src, "-vf",

@@ -26,7 +26,7 @@ for rank, t in spots:
     a, b = max(0, t - before), t + after
     mp4 = os.path.join(out, f"h{rank:02d}.mp4")
     if not os.path.exists(mp4):
-        subprocess.run(["python3", f"{T}/twitch_section.py", url, str(a), str(b), mp4], capture_output=True)
+        subprocess.run([sys.executable, f"{T}/twitch_section.py", url, str(a), str(b), mp4], capture_output=True)
     if not os.path.exists(mp4):
         continue
     pcm = subprocess.run(["ffmpeg", "-v", "error", "-i", mp4, "-ac", "1", "-ar", "16000", "-f", "s16le", "-"],
@@ -35,7 +35,7 @@ for rank, t in spots:
     segs, _ = model.transcribe(audio, vad_filter=True, beam_size=1, condition_on_previous_text=False)
     lines = [f"{hms(a + s.start)} {s.text.strip()}" for s in segs]
     open(mp4[:-4] + ".txt", "w").write("\n".join(lines))
-    tags = subprocess.run(["python3", f"{T}/tagaudio.py", mp4, "1.0", "1.0", "0.3"], capture_output=True, text=True).stdout
+    tags = subprocess.run([sys.executable, f"{T}/tagaudio.py", mp4, "1.0", "1.0", "0.3"], capture_output=True, text=True).stdout
     keep = [l for l in tags.splitlines() if re.search(r"Laugh|Giggle|Chuckle|Snicker|Scream|Shout|Yell", l)]
     open(mp4[:-4] + ".tags", "w").write("\n".join(keep))
     laughs = sum(1 for l in keep if re.search(r"Laugh|Giggle|Chuckle|Snicker", l))
