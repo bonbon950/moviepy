@@ -1,0 +1,23 @@
+{
+  "timeZone": "Asia/Manila",
+  "dependencies": {
+    "enabledAdvancedServices": [
+      {"userSymbol": "YouTube", "serviceId": "youtube", "version": "v3"},
+      {"userSymbol": "YouTubeAnalytics", "serviceId": "youtubeAnalytics", "version": "v2"}
+    ]
+  },
+  "oauthScopes": [
+    "https://www.googleapis.com/auth/drive",
+    "https://www.googleapis.com/auth/spreadsheets",
+    "https://www.googleapis.com/auth/script.external_request",
+    "https://www.googleapis.com/auth/script.scriptapp",
+    "https://www.googleapis.com/auth/youtube.readonly",
+    "https://www.googleapis.com/auth/yt-analytics.readonly"
+  ],
+  "webapp": {
+    "executeAs": "USER_DEPLOYING",
+    "access": "ANYONE_ANONYMOUS"
+  },
+  "exceptionLogging": "STACKDRIVER",
+  "runtimeVersion": "V8"
+}

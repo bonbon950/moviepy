@@ -1,11 +1,15 @@
 /**
- * Bjorn's Shorts -> Google Drive helper. Version 4.
+ * Bjorn's Shorts -> Google Drive helper. Version 5.
  * Can ONLY:
  *  - create/find "OUTPUT (...)" folders, list them, upload videos into them,
  *    restore (un-trash) files that belong to an OUTPUT folder;
  *  - read / add rows / update cells in the ONE spreadsheet named "POSTING PLAN";
- *  - delete ROWS of that sheet only when they are approved+posted or rejected (checked row by row).
+ *  - delete ROWS of that sheet only when they are approved+posted or rejected (checked row by row);
+ *  - v5: READ the YouTube channel (videos, status, view/like/comment counts) and READ YouTube Analytics;
+ *    write hourly stat snapshots into a "STATS" tab of the POSTING PLAN.
  * Cannot delete any file or folder. Cannot touch any other file or folder.
+ * YouTube access is READ-ONLY (enforced by the scopes in appsscript.json): it cannot upload, edit,
+ * delete, or change the visibility of anything on the channel.
  */
 var OUT = /^OUTPUT \(.+\)$/;
 var PLAN_NAME = 'POSTING PLAN';
@@ -102,6 +106,21 @@ function doPost(e) {
       stylePlan(planSheet(p.sheetId));
       return out({ok: true});
     }
+    // ---- v5: YouTube, read-only -------------------------------------------------------------------
+    if (p.action === 'yt_videos') {      // latest uploads (public + scheduled/private) with live counts
+      return out(ytVideos(Math.min(Number(p.max) || 50, 200)));
+    }
+    if (p.action === 'yt_analytics') {   // body = JSON {startDate, endDate, metrics, dimensions?, filters?, sort?, maxResults?}
+      var q = JSON.parse(e.postData.contents || '{}');
+      var opt = {ids: 'channel==MINE', startDate: q.startDate, endDate: q.endDate, metrics: q.metrics};
+      ['dimensions', 'filters', 'sort', 'maxResults'].forEach(function (k) { if (q[k]) opt[k] = q[k]; });
+      var rep = YouTubeAnalytics.Reports.query(opt);
+      return out({columns: (rep.columnHeaders || []).map(function (c) { return c.name; }), rows: rep.rows || []});
+    }
+    if (p.action === 'yt_stats_read') {  // the STATS tab (hourly snapshots)
+      var st = statsSheet();
+      return out({values: st.getDataRange().getDisplayValues()});
+    }
     if (p.action === 'start') {
       var folder2 = DriveApp.getFolderById(p.folderId);
       if (!OUT.test(folder2.getName())) return out({error: 'not an OUTPUT folder'});
@@ -149,4 +168,66 @@ function out(o) {
 
 function authorizeSheets() {
   SpreadsheetApp.openById('12th0-8z61cYyA0eT0HxaCjsn5Avy0DW5H6PyGTnVtx4').getName();
+}
+
+// ---- v5: YouTube read-only helpers -----------------------------------------------------------------
+var PLAN_ID = '12th0-8z61cYyA0eT0HxaCjsn5Avy0DW5H6PyGTnVtx4';
+
+function ytVideos(max) {
+  var ch = YouTube.Channels.list('snippet,contentDetails,statistics', {mine: true}).items[0];
+  var uploads = ch.contentDetails.relatedPlaylists.uploads, ids = [], token = '';
+  do {
+    var pl = YouTube.PlaylistItems.list('contentDetails', {playlistId: uploads, maxResults: 50, pageToken: token});
+    pl.items.forEach(function (it) { ids.push(it.contentDetails.videoId); });
+    token = pl.nextPageToken || '';
+  } while (token && ids.length < max);
+  ids = ids.slice(0, max);
+  var vids = [];
+  for (var i = 0; i < ids.length; i += 50) {
+    var res = YouTube.Videos.list('snippet,status,statistics,contentDetails', {id: ids.slice(i, i + 50).join(',')});
+    res.items.forEach(function (v) {
+      vids.push({id: v.id, title: v.snippet.title, publishedAt: v.snippet.publishedAt,
+                 privacy: v.status.privacyStatus, publishAt: v.status.publishAt || '',
+                 duration: v.contentDetails.duration,
+                 views: Number(v.statistics.viewCount || 0), likes: Number(v.statistics.likeCount || 0),
+                 comments: Number(v.statistics.commentCount || 0)});
+    });
+  }
+  return {channel: {title: ch.snippet.title, subscribers: Number(ch.statistics.subscriberCount || 0),
+                    views: Number(ch.statistics.viewCount || 0), videos: Number(ch.statistics.videoCount || 0)},
+          videos: vids};
+}
+
+function statsSheet() {  // "STATS" tab inside the POSTING PLAN (kept after the main tab)
+  var ss = SpreadsheetApp.openById(PLAN_ID), sh = ss.getSheetByName('STATS');
+  if (!sh) {
+    sh = ss.insertSheet('STATS', ss.getSheets().length);
+    sh.appendRow(['SNAPSHOT (PH time)', 'VIDEO ID', 'TITLE', 'WENT LIVE (PH time)', 'STATUS', 'VIEWS', 'LIKES', 'COMMENTS']);
+    sh.setFrozenRows(1);
+    sh.getRange(1, 1, 1, 8).setFontWeight('bold').setBackground('#111111').setFontColor('#FFFFFF');
+  }
+  return sh;
+}
+
+function snapshotStats() {  // runs every hour (installHourlyTrigger); public videos from the last 14 days
+  var data = ytVideos(60), now = new Date(), cutoff = now.getTime() - 14 * 86400000, rows = [];
+  var fmt = function (d) { return Utilities.formatDate(d, 'Asia/Manila', 'yyyy-MM-dd HH:mm'); };
+  data.videos.forEach(function (v) {
+    var live = new Date(v.publishAt || v.publishedAt);
+    if (v.privacy === 'public' && live.getTime() >= cutoff) {
+      rows.push([fmt(now), v.id, v.title, fmt(live), v.privacy, v.views, v.likes, v.comments]);
+    }
+  });
+  if (rows.length) {
+    var sh = statsSheet();
+    sh.getRange(sh.getLastRow() + 1, 1, rows.length, rows[0].length).setValues(rows);
+  }
+}
+
+function installHourlyTrigger() {  // run ONCE by hand: authorizes and starts the hourly snapshot (no duplicates)
+  ScriptApp.getProjectTriggers().forEach(function (t) {
+    if (t.getHandlerFunction() === 'snapshotStats') ScriptApp.deleteTrigger(t);
+  });
+  ScriptApp.newTrigger('snapshotStats').timeBased().everyHours(1).create();
+  snapshotStats();
 }
