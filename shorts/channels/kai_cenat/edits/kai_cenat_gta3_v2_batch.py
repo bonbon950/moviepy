@@ -6,7 +6,7 @@ Gameplay clips use the split frame (enlarged facecam + gameplay); the Loch Ness 
 usage: gta3_v2_batch.py WORKDIR [clip ...]       (all times are VOD seconds; batch/<name>_parts.json maps them)
 """
 import json, os, sys
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "tools"))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "..", "..", "tools"))
 from plankit import build, out_times
 
 S = sys.argv[1]; B = f"{S}/batch"

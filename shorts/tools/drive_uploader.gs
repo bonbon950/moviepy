@@ -1,5 +1,6 @@
 /**
- * Bjorn's Shorts -> Google Drive helper. Version 5.
+ * Bjorn's Shorts -> Google Drive helper. Version 6 (multi-channel: one copy of this script per channel's
+ * Google account; nothing channel-specific is hard-coded — see CHANNEL SETTINGS below).
  * Can ONLY:
  *  - create/find "OUTPUT (...)" folders, list them, upload videos into them,
  *    restore (un-trash) files that belong to an OUTPUT folder;
@@ -11,8 +12,21 @@
  * YouTube access is READ-ONLY (enforced by the scopes in appsscript.json): it cannot upload, edit,
  * delete, or change the visibility of anything on the channel.
  */
-var OUT = /^OUTPUT \(.+\)$/;
-var PLAN_NAME = 'POSTING PLAN';
+// ---- CHANNEL SETTINGS (the only part to change when copying this script for a new channel) ----------
+// Must match the channel's settings file in the repo: shorts/channels/<id>/<id>_channel.json
+var PLAN_NAME = 'POSTING PLAN';          // name of THIS channel's posting-plan sheet in its Drive
+// Output folders: "OUTPUT (<date>)", optionally with a channel prefix, e.g. "KAI CENAT - OUTPUT (<date>)"
+var OUT = /^(.+ - )?OUTPUT \(.+\)$/;
+// -------------------------------------------------------------------------------------------------------
+
+var PLAN_ID_CACHE = null;
+function planId() {  // the one sheet named PLAN_NAME in this account's Drive (found by name, no hard-coded ID)
+  if (PLAN_ID_CACHE) return PLAN_ID_CACHE;
+  var it = DriveApp.getFilesByName(PLAN_NAME), ids = [];
+  while (it.hasNext()) { var f = it.next(); if (!f.isTrashed() && f.getMimeType() === MimeType.GOOGLE_SHEETS) ids.push(f.getId()); }
+  if (ids.length !== 1) throw 'expected exactly one sheet named "' + PLAN_NAME + '", found ' + ids.length;
+  return (PLAN_ID_CACHE = ids[0]);
+}
 
 function isOutputFile(file) {
   var ps = file.getParents();
@@ -45,7 +59,7 @@ function doPost(e) {
   var p = e.parameter;
   try {
     if (p.action === 'folder') {
-      if (!OUT.test(p.name || '')) return out({error: 'folder name must be OUTPUT (...)'});
+      if (!OUT.test(p.name || '')) return out({error: 'folder name must be OUTPUT (...) or <PREFIX> - OUTPUT (...)'});
       var it = DriveApp.getFoldersByName(p.name);
       var f = it.hasNext() ? it.next() : DriveApp.createFolder(p.name);
       return out({id: f.getId(), url: f.getUrl()});
@@ -167,11 +181,10 @@ function out(o) {
 }
 
 function authorizeSheets() {
-  SpreadsheetApp.openById('12th0-8z61cYyA0eT0HxaCjsn5Avy0DW5H6PyGTnVtx4').getName();
+  SpreadsheetApp.openById(planId()).getName();
 }
 
 // ---- v5: YouTube read-only helpers -----------------------------------------------------------------
-var PLAN_ID = '12th0-8z61cYyA0eT0HxaCjsn5Avy0DW5H6PyGTnVtx4';
 
 function ytVideos(max) {
   var ch = YouTube.Channels.list('snippet,contentDetails,statistics', {mine: true}).items[0];
@@ -199,7 +212,7 @@ function ytVideos(max) {
 }
 
 function statsSheet() {  // "STATS" tab inside the POSTING PLAN (kept after the main tab)
-  var ss = SpreadsheetApp.openById(PLAN_ID), sh = ss.getSheetByName('STATS');
+  var ss = SpreadsheetApp.openById(planId()), sh = ss.getSheetByName('STATS');
   if (!sh) {
     sh = ss.insertSheet('STATS', ss.getSheets().length);
     sh.appendRow(['SNAPSHOT (PH time)', 'VIDEO ID', 'TITLE', 'WENT LIVE (PH time)', 'STATUS', 'VIEWS', 'LIKES', 'COMMENTS']);

@@ -4,7 +4,7 @@ usage: halloween_batch.py SCRATCHPAD [clip ...]
 Times in keep/overrides/speakers are SOURCE seconds of batch/<name>_src.mp4; ot(t) maps to OUTPUT time.
 """
 import os, sys
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "tools"))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "..", "..", "tools"))
 from plankit import build, out_times
 
 S = sys.argv[1]; B = f"{S}/vod/batch"

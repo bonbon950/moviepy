@@ -1,17 +1,20 @@
 """Read / update / extend the POSTING PLAN Google Sheet through the Drive helper (v3).
 
-usage:
-  posting_plan.py URL read
-  posting_plan.py URL set ROW COL "value"          (1-based; e.g. STATUS column = 8)
-  posting_plan.py URL append rows.json            (list of 8-column rows)
-  posting_plan.py URL style
+usage:   (CHANNEL = channel id like kai_cenat, or the web-app URL = old way, Kai Cenat channel)
+  posting_plan.py CHANNEL read
+  posting_plan.py CHANNEL set ROW COL "value"          (1-based; e.g. STATUS column = 8)
+  posting_plan.py CHANNEL append rows.json            (list of 8-column rows)
+  posting_plan.py CHANNEL style
 """
 import json, os, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import upload_drive as u  # noqa: E402
+from channel import load  # noqa: E402
 
-SHEET_ID = "12th0-8z61cYyA0eT0HxaCjsn5Avy0DW5H6PyGTnVtx4"
-u.URL, cmd = sys.argv[1], sys.argv[2]
+ch = load(None if sys.argv[1].startswith("http") else sys.argv[1])
+SHEET_ID = ch["posting_plan_sheet_id"]
+u.URL = sys.argv[1] if sys.argv[1].startswith("http") else ch["uploader_url"]
+cmd = sys.argv[2]
 if cmd == "read":
     r = u.call({"action": "sheet_read", "sheetId": SHEET_ID})
     if "error" in r:

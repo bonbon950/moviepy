@@ -6,16 +6,19 @@ Rules (Bjorn): delete a row when
   - APPROVE is NO                                                   -> rejected
 Blank APPROVE = not reviewed yet -> never deleted. Only sheet rows are removed, never Drive videos.
 
-usage: plan_cleanup.py WEBAPP_URL            (dry run: shows what would be deleted)
-       plan_cleanup.py WEBAPP_URL --apply    (deletes, then reads the sheet back)
+usage: plan_cleanup.py CHANNEL            (dry run: shows what would be deleted)
+       plan_cleanup.py CHANNEL --apply    (deletes, then reads the sheet back)
+       CHANNEL = channel id like kai_cenat, or the web-app URL (old way, Kai Cenat channel)
 """
 import datetime as dt, json, os, re, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import upload_drive as u  # noqa: E402
+from channel import load  # noqa: E402
 
-SHEET_ID = "12th0-8z61cYyA0eT0HxaCjsn5Avy0DW5H6PyGTnVtx4"
+ch = load(None if sys.argv[1].startswith("http") else sys.argv[1])
+SHEET_ID = ch["posting_plan_sheet_id"]
 PH = dt.timezone(dt.timedelta(hours=8))
-u.URL = sys.argv[1]
+u.URL = sys.argv[1] if sys.argv[1].startswith("http") else ch["uploader_url"]
 apply = "--apply" in sys.argv
 
 

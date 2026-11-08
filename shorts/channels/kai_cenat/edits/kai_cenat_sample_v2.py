@@ -5,7 +5,7 @@ loop ending, no copyrighted music.
 usage: sample_v2.py WORKDIR      (times below are VOD seconds of YouTube zFgVajSvLac; job_src starts at 360)
 """
 import json, os, sys
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "tools"))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "..", "..", "tools"))
 from plankit import build, out_times
 
 S = sys.argv[1]; B = f"{S}/batch"; O = 360

@@ -1,7 +1,9 @@
-"""Upload finished shorts into Bjorn's Drive folder "OUTPUT (<date>)" via the Apps Script web app.
+"""Upload finished shorts into a channel's Drive output folder via that channel's Apps Script web app.
 
-usage: upload_drive.py WEBAPP_URL "OUTPUT (November 6, 2026)" video1.mp4 [video2.mp4 ...]
-(WEBAPP_URL = the deployed drive_uploader.gs URL; keep it private.)
+usage: upload_drive.py CHANNEL "November 11, 2026" video1.mp4 [...]       (CHANNEL = id like kai_cenat;
+                                                                         folder name from its settings)
+       upload_drive.py WEBAPP_URL "OUTPUT (November 6, 2026)" video1.mp4   (old way)
+(The web-app URL is private: it is read from the channel's local uploader_url_file, never from the repo.)
 Uploads in 6 MB chunks (resumable), prints the folder link at the end.
 """
 import base64, json, os, sys, urllib.parse, urllib.request
@@ -64,4 +66,12 @@ def main(FOLDER, files):
 
 
 if __name__ == "__main__":
-    main(sys.argv[2], sys.argv[3:])
+    if URL and not URL.startswith("http"):            # channel id -> its own uploader + folder naming
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        from channel import load
+        ch = load(URL)
+        URL = ch["uploader_url"] or sys.exit(f"no uploader URL saved for {ch['id']}: {ch['uploader_url_file']}")
+        folder = sys.argv[2] if "(" in sys.argv[2] else ch["output_folder"](sys.argv[2])
+    else:
+        folder = sys.argv[2]
+    main(folder, sys.argv[3:])

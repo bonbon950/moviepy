@@ -3,7 +3,7 @@
 Builds plan.json for make_short.py. Source = nail_src.mp4 (VOD 4670-4790 s).
 """
 import json, os, sys
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "tools"))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "..", "..", "tools"))
 from captions import to_captions
 
 S = sys.argv[1]            # scratchpad dir

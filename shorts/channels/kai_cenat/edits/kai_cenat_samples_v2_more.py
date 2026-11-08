@@ -4,7 +4,7 @@ Sample 2 = ice cream truck (truck_src, VOD offset 5); Sample 3 = bar (bar_src, V
 usage: samples_v2_more.py WORKDIR [truck] [bar]     (times are VOD seconds of YouTube zFgVajSvLac)
 """
 import json, os, sys
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "tools"))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "..", "..", "tools"))
 from plankit import build, out_times
 
 S = sys.argv[1]; B = f"{S}/batch"

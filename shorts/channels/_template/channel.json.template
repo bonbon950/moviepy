@@ -1,0 +1,16 @@
+{
+  "id": "<id>",
+  "streamer": "<STREAMER>",
+  "youtube_channel": "<YouTube channel name>",
+  "niche": "<streamer> — IRL first",
+  "rulebook": "<STREAMER>_RULEBOOK.md",
+  "edits_dir": "edits",
+  "timezone": "Asia/Manila",
+
+  "drive_output_folder": "<STREAMER> - OUTPUT ({date})",
+  "posting_plan_sheet_name": "POSTING PLAN",
+  "posting_plan_sheet_id": "<ID of that sheet, from its URL>",
+
+  "local_dir": "~/Documents/shorts_work/channels/<id>",
+  "uploader_url_file": "~/Documents/shorts_work/channels/<id>/uploader_url.txt"
+}

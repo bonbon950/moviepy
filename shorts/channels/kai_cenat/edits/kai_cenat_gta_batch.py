@@ -4,7 +4,7 @@ Split layout (facecam on top, gameplay below). Clips CLIP8..CLIP13.
 usage: gta_batch.py SCRATCHPAD [clip ...]
 """
 import os, sys
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "tools"))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "..", "..", "tools"))
 from plankit import build, out_times
 
 S = sys.argv[1]; B = f"{S}/gta/batch"

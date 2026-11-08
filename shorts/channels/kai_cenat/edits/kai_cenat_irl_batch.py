@@ -5,7 +5,7 @@ usage: irl_batch.py WORKDIR [clip ...]
 All times below are VOD seconds; v() converts them to SOURCE seconds of batch/<name>_src.mp4.
 """
 import os, sys
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "tools"))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "..", "..", "tools"))
 from plankit import build, out_times
 
 S = sys.argv[1]; B = f"{S}/batch"
