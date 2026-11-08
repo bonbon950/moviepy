@@ -1,0 +1,25 @@
+{
+  "id": "fanum",
+  "streamer": "Fanum",
+  "youtube_channel": "Fanum Daily",
+  "youtube_handle": "@FanumDaily",
+  "youtube_channel_id": "UCzhp2_oaj7vSMbCIfATCybg",
+  "niche": "Fanum — IRL first (his own streams); gameplay only as an approved exception",
+  "rulebook": "FANUM_RULEBOOK.md",
+  "edits_dir": "edits",
+  "timezone": "Asia/Manila",
+
+  "drive_output_folder": "FANUM - OUTPUT ({date})",
+  "posting_plan_sheet_name": "FANUM - POSTING PLAN",
+  "posting_plan_sheet_id": "",
+
+  "local_dir": "~/Documents/shorts_work/channels/fanum",
+  "uploader_url_file": "~/Documents/shorts_work/channels/fanum/uploader_url.txt",
+
+  "_notes": [
+    "Own Google account (separate from KaiCentralClip): own Drive, uploader script copy, sheet and YouTube access.",
+    "posting_plan_sheet_id is filled in once Bjorn creates 'FANUM - POSTING PLAN' in that account.",
+    "The uploader web-app URL is PRIVATE: only in uploader_url_file on the PC, never in this repo.",
+    "Never reuse a clip or moment that is already on KaiCentralClip (Fanum often appears on Kai's streams)."
+  ]
+}

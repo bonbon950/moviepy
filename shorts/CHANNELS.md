@@ -7,6 +7,7 @@ copy, POSTING PLAN sheet and YouTube (read-only) access. Channels never share cl
 | Channel id | Streamer | YouTube channel | Folder |
 |---|---|---|---|
 | `kai_cenat` | Kai Cenat | **KaiCentralClip** (formerly The13Clips) | `channels/kai_cenat/` |
+| `fanum` | Fanum | **Fanum Daily** (@FanumDaily) — setting up | `channels/fanum/` |
 
 ## What is where
 ```
@@ -15,6 +16,7 @@ shorts/
 ├── tools/                     ← shared engine: scan, transcribe, captions, render, upload, posting plan, analytics
 ├── *_manifest.tsv             ← shared SFX / music libraries
 └── channels/
+    ├── fanum/                         ← Fanum Daily: FANUM_RULEBOOK.md, fanum_channel.json, edits/fanum_*.py
     ├── kai_cenat/
     │   ├── KAI_CENAT_RULEBOOK.md     ← rules for this channel (editing style v2 = section 15)
     │   ├── kai_cenat_channel.json    ← settings: YouTube channel, Drive folder naming, sheet, local paths
@@ -39,6 +41,8 @@ session, paste it once and save it to that path for the session.
 ## Rules that apply to every channel
 - Drive: never delete or trash anything; list the folder before and after every upload; no duplicates.
 - Never post the same clip or the same streamer moment on two channels (reused/repetitive content risk).
+  Streamers appear on each other's streams (Fanum is often on Kai's): before editing a moment for one channel,
+  check the other channel's edit plans and POSTING PLAN so the same moment never goes up twice.
 - Editing style v2 (see each rulebook, section 15) and the growth plan (section 14) apply to every channel.
 
 ## Adding a new streamer
