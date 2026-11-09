@@ -4,7 +4,7 @@ usage: twitch_section.py PLAYLIST_URL START_S END_S OUT.mp4
 (PLAYLIST_URL from: yt-dlp -g -f 1080p60 <vod url>)
 Output is cut to exactly [START_S, END_S] relative to the VOD.
 """
-import os, re, subprocess, sys, tempfile, urllib.request
+import os, re, shutil, subprocess, sys, tempfile, urllib.request
 from concurrent.futures import ThreadPoolExecutor
 
 url, start, end, out = sys.argv[1], float(sys.argv[2]), float(sys.argv[3]), sys.argv[4]
@@ -56,4 +56,5 @@ first = need[0][1][0]
 subprocess.run(["ffmpeg", "-y", "-v", "error", "-f", "concat", "-safe", "0", "-i", lst, "-ss", f"{start - first:.3f}",
                 "-t", f"{end - start:.3f}", "-c:v", "libx264", "-preset", "veryfast", "-crf", "14", "-af", "aresample=async=1:first_pts=0", "-c:a", "aac",
                 "-b:a", "192k", out], check=True)
+shutil.rmtree(tmp, ignore_errors=True)   # raw segments are big: never leave them behind (disk filled up once)
 print(f"{out}: {len(need)} segments ({muted} muted by Twitch, {silent} given clean silence)")
