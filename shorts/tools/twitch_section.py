@@ -32,10 +32,28 @@ def get(item):
 with ThreadPoolExecutor(8) as ex:
     names = list(ex.map(get, need))
 muted = sum("muted" in n for n in names)
+# Twitch-muted segments carry broken (or no) audio: decoding drops those samples, so everything after
+# them drifts out of sync. They are silent anyway -> replace their audio with real silence of equal length.
+def fix_audio(item):
+    (i, (t0, d, name)), got = item
+    p = os.path.join(tmp, f"{i:06d}.ts")
+    has = subprocess.run(["ffprobe", "-v", "error", "-select_streams", "a", "-show_entries", "stream=index",
+                          "-of", "csv=p=0", p], capture_output=True, text=True).stdout.strip()
+    if has and "muted" not in got:
+        return 0
+    q = p[:-3] + "_s.ts"
+    subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", p, "-f", "lavfi", "-i",
+                    # audio FIRST, like Twitch's own segments: the concat demuxer pairs streams by index
+                    "anullsrc=channel_layout=stereo:sample_rate=48000", "-map", "1:a", "-map", "0:v",
+                    "-c:v", "copy", "-c:a", "aac", "-t", f"{d:.3f}", q], check=True)
+    os.replace(q, p)
+    return 1
+with ThreadPoolExecutor(8) as ex:
+    silent = sum(ex.map(fix_audio, zip(need, names)))
 lst = os.path.join(tmp, "l.txt")
 open(lst, "w").write("".join(f"file '{os.path.join(tmp, f'{i:06d}.ts')}'\n" for i, _ in need))
 first = need[0][1][0]
 subprocess.run(["ffmpeg", "-y", "-v", "error", "-f", "concat", "-safe", "0", "-i", lst, "-ss", f"{start - first:.3f}",
-                "-t", f"{end - start:.3f}", "-c:v", "libx264", "-preset", "veryfast", "-crf", "14", "-c:a", "aac",
+                "-t", f"{end - start:.3f}", "-c:v", "libx264", "-preset", "veryfast", "-crf", "14", "-af", "aresample=async=1:first_pts=0", "-c:a", "aac",
                 "-b:a", "192k", out], check=True)
-print(f"{out}: {len(need)} segments ({muted} muted by Twitch)")
+print(f"{out}: {len(need)} segments ({muted} muted by Twitch, {silent} given clean silence)")
