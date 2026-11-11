@@ -26,7 +26,8 @@ subprocess.run([sys.executable, f"{T}/words.py", src, f"{d}/{name}_words.json"],
 lg = subprocess.run([sys.executable, f"{T}/tagaudio.py", src, "1.0", "0.5", "0.25"], capture_output=True, text=True).stdout
 open(f"{d}/{name}_laughs.txt", "w").write("\n".join(l for l in lg.splitlines()
     if any(k in l for k in ("Laugh", "Giggle", "Chuckle", "Snicker", "Scream", "Shout", "Yell"))))
+FONT = "fontfile='C\\:/Windows/Fonts/arial.ttf':" if os.name == "nt" else ""   # Windows ffmpeg has no fontconfig
 subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", src, "-vf",
-                "fps=1,scale=240:135,drawtext=text='%{pts\\:hms}':x=2:y=2:fontsize=14:fontcolor=yellow:box=1:boxcolor=black,"
+                f"fps=1,scale=240:135,drawtext={FONT}text='%{{pts\\:hms}}':x=2:y=2:fontsize=14:fontcolor=yellow:box=1:boxcolor=black,"
                 "tile=10x12", "-frames:v", "1", f"{d}/{name}_sheet.jpg"], check=True)
 print(f"{name}: {t:.1f}s from {len(parts)} parts")

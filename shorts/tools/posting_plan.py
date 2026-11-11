@@ -5,6 +5,7 @@ usage:   (CHANNEL = channel id like kai_cenat, or the web-app URL = old way, Kai
   posting_plan.py CHANNEL set ROW COL "value"          (1-based; e.g. STATUS column = 8)
   posting_plan.py CHANNEL append rows.json            (list of 8-column rows)
   posting_plan.py CHANNEL style
+  posting_plan.py CHANNEL dashboard                   (helper v7+: rebuild the DASHBOARD charts tab now)
 """
 import json, os, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -33,3 +34,8 @@ elif cmd == "append":
     print(u.call({"action": "sheet_append", "sheetId": SHEET_ID}, json.dumps(rows).encode()))
 elif cmd == "style":
     print(u.call({"action": "sheet_style", "sheetId": SHEET_ID}))
+elif cmd == "dashboard":   # helper v7+: rebuild the DASHBOARD tab (charts) now; it also rebuilds every hour
+    r = u.call({"action": "dashboard"})
+    if r.get("error") == "unknown action":
+        sys.exit("this channel's helper is older than v7: paste tools/drive_uploader.gs and deploy a new version")
+    print(r)
